@@ -1,0 +1,88 @@
+{
+  "commit": "29e0598c8d3a1360a1db526946b68ca00e244f4f",
+  "units": {
+    "unit1": {
+      "vocabularyRecords": 104,
+      "grammar": 16,
+      "vocabulary": 104,
+      "examPool": 120,
+      "exerciseTypes": {
+        "multiple-choice": 120
+      },
+      "uniqueContent": 120,
+      "duplicateIds": [],
+      "duplicateContent": [],
+      "missingAnswers": [],
+      "missingExplanations": [],
+      "missingTopic": 120,
+      "missingDifficulty": 120,
+      "missingSource": 120
+    },
+    "unit2": {
+      "vocabularyRecords": 109,
+      "grammar": 16,
+      "vocabulary": 109,
+      "examPool": 125,
+      "exerciseTypes": {
+        "multiple-choice": 125
+      },
+      "uniqueContent": 123,
+      "duplicateIds": [],
+      "duplicateContent": [
+        {
+          "key": "curfew có nghĩa là gì / what does curfew mean",
+          "ids": [
+            "unit2-v-u2-008",
+            "unit2-v-u2-088"
+          ]
+        },
+        {
+          "key": "open-minded có nghĩa là gì / what does open-minded mean",
+          "ids": [
+            "unit2-v-u2-009",
+            "unit2-v-u2-090"
+          ]
+        }
+      ],
+      "missingAnswers": [],
+      "missingExplanations": [],
+      "missingTopic": 125,
+      "missingDifficulty": 125,
+      "missingSource": 125
+    },
+    "unit3": {
+      "vocabularyRecords": 120,
+      "grammar": 16,
+      "vocabulary": 120,
+      "examPool": 136,
+      "exerciseTypes": {
+        "multiple-choice": 136
+      },
+      "uniqueContent": 136,
+      "duplicateIds": [],
+      "duplicateContent": [],
+      "missingAnswers": [],
+      "missingExplanations": [],
+      "missingTopic": 136,
+      "missingDifficulty": 136,
+      "missingSource": 136
+    },
+    "unit4": {
+      "vocabularyRecords": 137,
+      "grammar": 16,
+      "vocabulary": 137,
+      "examPool": 153,
+      "exerciseTypes": {
+        "multiple-choice": 153
+      },
+      "uniqueContent": 153,
+      "duplicateIds": [],
+      "duplicateContent": [],
+      "missingAnswers": [],
+      "missingExplanations": [],
+      "missingTopic": 153,
+      "missingDifficulty": 153,
+      "missingSource": 153
+    }
+  }
+}

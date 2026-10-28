@@ -1,0 +1,36 @@
+{
+  "sources": [
+    {
+      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
+      "sha256": "cacdfde44694ec42d3213786135c03b1df7703c17104be97dbfb2d0b19dbfbc2",
+      "paragraphs": 605
+    },
+    {
+      "filename": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
+      "sha256": "5ef37d3d03f5135c940099b302f71d94c99484964d6edcb3ec701d4ea66736ba",
+      "paragraphs": 159
+    },
+    {
+      "filename": "TỜ SỐ 03 TEST 02 UNIT 1 A LONG AND HEALTHY LIFE.docx",
+      "sha256": "287d5223102d2530e2c66a166188b3fa897fa2705c4e77d95096217a1e7f1897",
+      "paragraphs": 183
+    },
+    {
+      "filename": "TỜ SỐ 04 TEST 03 UNIT 1 A LONG AND HEALTHY LIFE.docx",
+      "sha256": "cca270be59e9b58f8e271a1aaf91e271ea94639d91ee73756b3ea071f84e8c12",
+      "paragraphs": 179
+    }
+  ],
+  "importedQuestionCount": 70,
+  "importedFrom": [
+    "TỜ SỐ 01",
+    "TỜ SỐ 02"
+  ],
+  "reviewNotes": [
+    "Tờ 03 and 04 inspected but not imported in this first Unit 1 release.",
+    "No answer key was supplied. Answers and Vietnamese explanations independently checked.",
+    "Known excluded: Ex1 Q3 missing option; Q18 duplicate options and duplicate of Q74; Q39 duplicate options; Q40 multiple valid answers; Q48 missing option; Q49 malformed stem; Q52/Q68 multiple valid tense answers; Q57 malformed stem; Q102 two possible meanings; Q105 missing options; Q113 both to jog and jogging valid.",
+    "No new question has been generated to fill requested session sizes.",
+    "Original prompts and choices retained except whitespace. Transformation instructions and Vietnamese explanations added. Reading passage has one documented correction: complain for a lack of sleep -> complain about a lack of sleep. Source question 32 about that phrase is excluded."
+  ]
+}
