@@ -1,0 +1,172 @@
+{
+  "units": {
+    "unit1": {
+      "vocabularyRecords": 104,
+      "questionRecords": 190,
+      "uniqueEligible": 190,
+      "grammar": 50,
+      "vocabulary": 124,
+      "examSkills": 16,
+      "examPool": 190,
+      "exerciseTypes": {
+        "verb-forms": 45,
+        "multiple-choice": 104,
+        "gap-filling": 15,
+        "word-formation": 5,
+        "sentence-transformation": 5,
+        "cloze-test": 6,
+        "sentence-arrangement": 3,
+        "reading-comprehension": 7
+      },
+      "duplicateIds": [],
+      "duplicateContent": [],
+      "missingAnswers": [],
+      "missingExplanations": [],
+      "missingTopic": 0,
+      "missingDifficulty": 0,
+      "missingSource": 0,
+      "invalidQuestions": []
+    },
+    "unit2": {
+      "vocabularyRecords": 109,
+      "questionRecords": 125,
+      "uniqueEligible": 123,
+      "grammar": 16,
+      "vocabulary": 107,
+      "examSkills": 0,
+      "examPool": 123,
+      "exerciseTypes": {
+        "verb-forms": 16,
+        "multiple-choice": 107
+      },
+      "duplicateIds": [],
+      "duplicateContent": [
+        {
+          "key": "curfew có nghĩa là gì / what does curfew mean",
+          "ids": [
+            "unit2-v-u2-008",
+            "unit2-v-u2-088"
+          ]
+        },
+        {
+          "key": "open-minded có nghĩa là gì / what does open-minded mean",
+          "ids": [
+            "unit2-v-u2-009",
+            "unit2-v-u2-090"
+          ]
+        }
+      ],
+      "missingAnswers": [],
+      "missingExplanations": [],
+      "missingTopic": 0,
+      "missingDifficulty": 0,
+      "missingSource": 0,
+      "invalidQuestions": []
+    },
+    "unit3": {
+      "vocabularyRecords": 120,
+      "questionRecords": 136,
+      "uniqueEligible": 136,
+      "grammar": 16,
+      "vocabulary": 120,
+      "examSkills": 0,
+      "examPool": 136,
+      "exerciseTypes": {
+        "verb-forms": 16,
+        "multiple-choice": 120
+      },
+      "duplicateIds": [],
+      "duplicateContent": [],
+      "missingAnswers": [],
+      "missingExplanations": [],
+      "missingTopic": 0,
+      "missingDifficulty": 0,
+      "missingSource": 0,
+      "invalidQuestions": []
+    },
+    "unit4": {
+      "vocabularyRecords": 137,
+      "questionRecords": 153,
+      "uniqueEligible": 153,
+      "grammar": 16,
+      "vocabulary": 137,
+      "examSkills": 0,
+      "examPool": 153,
+      "exerciseTypes": {
+        "verb-forms": 16,
+        "multiple-choice": 137
+      },
+      "duplicateIds": [],
+      "duplicateContent": [],
+      "missingAnswers": [],
+      "missingExplanations": [],
+      "missingTopic": 0,
+      "missingDifficulty": 0,
+      "missingSource": 0,
+      "invalidQuestions": []
+    }
+  },
+  "global": {
+    "records": 604,
+    "uniqueEligible": 596,
+    "duplicateIds": [],
+    "duplicateContent": [
+      {
+        "key": "strong có nghĩa là gì / what does strong mean",
+        "ids": [
+          "unit1-v-u1-088",
+          "unit4-v-u4-023"
+        ]
+      },
+      {
+        "key": "strengthen có nghĩa là gì / what does strengthen mean",
+        "ids": [
+          "unit1-v-u1-089",
+          "unit4-v-u4-074"
+        ]
+      },
+      {
+        "key": "curfew có nghĩa là gì / what does curfew mean",
+        "ids": [
+          "unit2-v-u2-008",
+          "unit2-v-u2-088"
+        ]
+      },
+      {
+        "key": "open-minded có nghĩa là gì / what does open-minded mean",
+        "ids": [
+          "unit2-v-u2-009",
+          "unit2-v-u2-090"
+        ]
+      },
+      {
+        "key": "quality có nghĩa là gì / what does quality mean",
+        "ids": [
+          "unit2-v-u2-017",
+          "unit3-v-u3-049"
+        ]
+      },
+      {
+        "key": "culture có nghĩa là gì / what does culture mean",
+        "ids": [
+          "unit2-v-u2-029",
+          "unit4-v-u4-017"
+        ]
+      },
+      {
+        "key": "care about có nghĩa là gì / what does care about mean",
+        "ids": [
+          "unit2-v-u2-055",
+          "unit3-v-u3-081"
+        ]
+      },
+      {
+        "key": "depend on có nghĩa là gì / what does depend on mean",
+        "ids": [
+          "unit2-v-u2-057",
+          "unit4-v-u4-088"
+        ]
+      }
+    ]
+  }
+}

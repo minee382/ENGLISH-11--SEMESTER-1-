@@ -1,0 +1,3315 @@
+diff --git a/README.md b/README.md
+index 1aa4b0b..e2ace73 100644
+--- a/README.md
++++ b/README.md
+@@ -1,8 +1,16 @@
+ # English Success 11
+ 
+-Completed from the supplied React attachment, which ended mid-GrammarLabView.
++Phase 3 is a targeted Unit 1 update to the existing working application.
+ 
+-## Run
++- Preserves all 470 vocabulary records, grammar lessons, original activities, navigation and progress key.
++- Unit 1: 50 grammar questions, 124 vocabulary questions and 16 reading/cloze/arrangement questions; 190 unique questions in its shared exam pool.
++- 70 source-based additions from the original uploaded Unit 1 DOCX materials.
++- Practice Setup defaults to mixed focus/types, 20 questions, mixed difficulty.
++- Quick 10, Standard 20, Intensive 30, legacy short 5 and Review Mistakes.
++- Persistent question/attempt history, unseen-first selection, safe answer shuffling and honest caps for short banks.
++- Correct answers after submission; mistakes saved into the existing notebook.
++
++## Run and verify
+ 
+ ```sh
+ npm ci
+@@ -10,33 +18,12 @@ npm test
+ npm run build
+ ```
+ 
+-Serve `dist/` with a static HTTP server. The private hosted demo is also available.
+-
+-## Changes
+-
+-- Preserves all 470 vocabulary entries and the existing learning activities.
+-- Completes missing GrammarLabView, ExamPracticeView and MiniGamesView.
+-- 64 authored grammar questions, 16 per unit; 470 vocabulary-based exam questions.
+-- 12 detailed grammar lessons: forms, usage, examples, common mistakes and distinctions.
+-- Grammar, vocabulary and mixed papers; 5, 10 or 20 questions (grammar capped at 16).
+-- Retry prioritizes questions outside the previous paper, shuffles questions/options,
+-  clears answers/results, and keeps unit and mode. Reuse is necessary if a paper
+-  exceeds the available fresh questions; a full-bank paper changes order only.
+-- Submit requires every question, displays score and explanations, awards XP once
+-  per submitted paper. Downloadable papers include answer keys.
+-- Unit switching directly inside grammar, exams and games.
+-- Safer progress import; progress remains in browser-local storage.
++Serve `dist/` with a static HTTP server. `GeminiCanvas_App.jsx` is a self-contained export of the same updated source for a single-file React Canvas environment with React, lucide-react and Tailwind available. No direct edit to Gemini Canvas is claimed.
+ 
+-## Files
++See `audit/PHASE3_REPORT.md`, `audit/before.json`, `audit/after.json` and `audit/source-manifest.json` for actual counts, duplicate content, source provenance, tests, limits and changed components. Question banks and replay logic remain separate from UI in the modular source.
+ 
+-`src/App.jsx` retains the original UI and datasets and adds the missing views.
+-`src/learning-data.mjs` contains lessons, authored questions, sampling and validation.
+-`tests/learning.test.mjs` checks content integrity, repeat sampling and safe imports.
++The 70 imported questions have actual document references. Legacy authored questions are labelled as existing Phase 2 content, and vocabulary-meaning prompts as generated from existing vocabulary records. They are not falsely attributed to numbered DOCX exercises. Unit 2 contains two existing duplicate prompts, preserved in source but excluded from a practice session.
+ 
+-Grammar teaching notes and explanations are in Vietnamese; examples are in English.
+-The English language toggle changes interface labels. Question banks are practice
+-material, not a reproduction of official examination papers. Source vocabulary
+-and its source labels are retained as supplied and were not independently verified.
++History is browser/origin-local. It does not automatically sync between Gemini Canvas, the hosted demo, browsers or devices. Existing progress is retained; exports/imports include the new replay history. No content is manufactured to reach a requested session size.
+ 
+-GitHub returned no accessible repositories during this task, so no existing GitHub
+-repository was modified. Source is included here for importing into your repository.
++Recovery source: Phase 2 commit `29e0598c8d3a1360a1db526946b68ca00e244f4f`, tag `phase2-working-20261028`, saved hosted version 1, or the included Phase 2 backup. Compare a newer Gemini copy before applying the Phase 2 incremental patch.
+diff --git a/audit/PHASE3_REPORT.md b/audit/PHASE3_REPORT.md
+new file mode 100644
+index 0000000..757f3ed
+--- /dev/null
++++ b/audit/PHASE3_REPORT.md
+@@ -0,0 +1,76 @@
++# English Success 11 Phase 3 Unit 1 upgrade
++
++The existing Phase 2 source was updated incrementally. This package does not establish that the separate Gemini Canvas copy was changed. No Canvas URL was supplied and no Gemini Canvas connector was available. `GeminiCanvas_App.jsx` is a self-contained export of the same updated components for Canvas, without local module imports.
++
++## Actual imported bank audit
++
++Counts below measure actual app questions, not every question contained in a source paper. Exam pools include the grammar/vocabulary questions: these columns must not be added together.
++
++| Unit | Vocabulary records retained | Unique grammar before → after | Unique vocabulary before → after | Additional exam skills before → after | Unique exam pool before → after | Unique questions added |
++| --- | ---: | ---: | ---: | ---: | ---: | ---: |
++| 1 | 104 | 16 → 50 | 104 → 124 | 0 → 16 | 120 → 190 | 70 |
++| 2 | 109 | 16 → 16 | 107 → 107 | 0 → 0 | 123 → 123 | 0 |
++| 3 | 120 | 16 → 16 | 120 → 120 | 0 → 0 | 136 → 136 | 0 |
++| 4 | 137 | 16 → 16 | 137 → 137 | 0 → 0 | 153 → 153 | 0 |
++
++Unit 2 has 125 question records but 123 unique prompts. The repeated records are preserved; practice selection excludes duplicate content. Its two duplicate prompts are `curfew` (`u2-008`, `u2-088`) and `open-minded` (`u2-009`, `u2-090`). There are no duplicate IDs. No imported question lacks a correct answer or explanation, before or after.
++
++Across all units, eight groups have identical prompt content: the two Unit 2 groups above, plus cross-unit vocabulary prompts `strong`, `strengthen`, `quality`, `culture`, `care about`, `depend on`. These are not counted as new additions. Raw question records: 534 → 604; unique prompt content globally: 526 → 596. Summed unit-specific eligible counts: 532 → 602. Practice is scoped to one unit.
++
++Before this update, the question objects lacked explicit topic, exercise type, difficulty and source-reference metadata. These now exist. Legacy provenance is marked as Phase 2 authored content or a generated meaning prompt based on the supplied vocabulary record; it is not falsely attributed to a numbered DOCX question.
++
++## Unique questions by exercise type
++
++Before: all questions used MCQ answer input; Unit 1 had 16 grammar MCQs and 104 meaning MCQs. Units 2–4 had 16 grammar MCQs each and respectively 107, 120, 137 unique meaning MCQs.
++
++After, the taxonomy describes the exercise skill, with MCQ input except for transformations and arrangements:
++
++| Exercise type | Unit 1 | Unit 2 | Unit 3 | Unit 4 |
++| --- | ---: | ---: | ---: | ---: |
++| Verb forms | 45 | 16 | 16 | 16 |
++| Meaning MCQ | 104 | 107 | 120 | 137 |
++| Gap filling | 15 | 0 | 0 | 0 |
++| Word formation / part of speech MCQ | 5 | 0 | 0 | 0 |
++| Sentence transformation | 5 | 0 | 0 | 0 |
++| Sentence arrangement | 3 | 0 | 0 | 0 |
++| Cloze test | 6 | 0 | 0 | 0 |
++| Reading comprehension | 7 | 0 | 0 | 0 |
++| Total unique | 190 | 123 | 136 | 153 |
++
++This first release expands Unit 1 only. Units 2–4 use the shared selection architecture with their original banks; their requested content expansion has not been claimed as complete. Error-correction exercises are not invented where no verified imported item is available.
++
++## Source validation
++
++70 additions come from the original uploaded Unit 1 DOCX materials: 34 grammar, 20 contextual vocabulary, 6 cloze, 3 arrangements, 7 reading questions. Each has a stable ID, actual filename, section/question, zero-based DOCX paragraph indices and Library file identity. Full source hashes and exclusions are in `source-manifest.json`.
++
++`TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx`: selected exercises 1, 2, 4 and 7. `TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx`: selected reading questions 33–38 and 40. Tờ 03 and Tờ 04 were inspected but not imported in this release.
++
++Answers and Vietnamese explanations were independently checked; no supplied answer key was available. Ambiguous/incomplete source items were excluded. The sleep passage has one documented grammar correction: “complain for a lack of sleep” → “complain about a lack of sleep”. Its question 32 is excluded. The new questions are source imports, not manufactured variants or reordered-option duplicates. Passage IDs keep reading and cloze questions attached to their own complete text.
++
++Legacy vocabulary-practice distractors now avoid known equivalent meanings such as healthy/fit/in good shape and avoid shared meaningful Vietnamese words. This does not alter vocabulary records or the separate existing Vocab Lab component.
++
++## Practice and persistence
++
++Exam defaults: Unit 1, mixed focus, mixed exercise types, 20 questions, mixed difficulty. Grammar defaults to 10 grammar questions. Quick 10, Standard 20, Intensive 30 and Review Mistakes are available; the existing short 5-question choice is retained.
++
++Selection accepts only structurally validated unique bank questions. It prioritizes never attempted questions, with never displayed questions first within that tier; then uses least-recently-seen order. Unresolved errors are targeted in Review Mistakes and are lower priority in normal practice. It never pads a short filtered bank. It displays the actual available count and caps the session size. Repeats can occur after available fresh content is exhausted.
++
++Question/attempt history uses a new `es11_question_history_v1` key shared by Grammar and Exam. The existing `es11_student_an_progress` key is preserved. No XP, streak, mastered/review words or previous mistakes are reset. Unknown progress fields are preserved, and new history is included in export/import backups. Existing vocabulary mistakes remain reviewable. Browser storage is local to the browser and origin; it does not automatically sync between Gemini Canvas and the hosted demo, devices, or private/incognito sessions. If saving is blocked, the UI reports that cross-session guarantees are unavailable.
++
++Correct answers/explanations appear only after submission; pre-submission downloads contain questions only. Mistakes are added to the existing notebook and successful review removes the corresponding question-error entry. Double submission cannot award XP twice for a session.
++
++## Verification
++
++All 29 automated checks passed, including the original 14 checks. Build passed. `tests/phase3.test.mjs` covers three consecutive submitted 10-question Grammar sessions and three submitted 10-question mixed Exam sessions with history reloaded between each: each produced 30 unique IDs, with no within-session duplicates and correct shuffled answer mapping. It also covers exhaustion, zero results, difficulty/type filters, answer normalization, old mistakes, idempotent submission, unknown progress fields and unavailable storage.
++
++Browser checks passed for the requested Unit 1 mixed/20/mixed defaults and 20 unique questions with no visible answer key. Grammar produced 30 unique questions in three 10-question sessions, including a page reload. Exam produced 30 unique questions in three 10-question sessions. A submission displayed its score, awarded XP once, and added nine actual test errors and their explanations to the notebook. Test history/progress was written only to the local preview origin, not the live app's browser storage. Vocabulary, Grammar, Exam and Games remained accessible; the existing game rendered its full matching activity.
++
++All 470 vocabulary records and all grammar lesson objects compare exactly with the Phase 2 version. Tests also compare the source of NavTab, VocabLabView, FlashcardMode, MultipleChoiceMode, SpellingMode, WordMatchingMode and MiniGamesView against the recovery version; they are unchanged.
++
++## Components modified and recovery
++
++Modified: `PracticeQuiz` (session selection, input types and submission), `GrammarLabView` and `ExamPracticeView` (bank/setup wiring), `MistakesNotebookView` (explanations/source display), progress import/export and `normalizeProgress` (preserve extension fields and question mistakes).
++
++Added: `PracticeSetup.jsx`, `question-bank.mjs`, `unit1-source-bank.json`, `smart-replay.mjs`, targeted tests and audit artifacts. There are no dependency changes or navigation/design rewrites.
++
++Recovery: Phase 2 source commit `29e0598c8d3a1360a1db526946b68ca00e244f4f`, local tag `phase2-working-20261028`, original hosted saved version 1 and `english-11-phase2-backup.zip`. The source was not rebuilt from scratch. Apply the incremental patch only to the matching Phase 2 source; do not overwrite a newer divergent Canvas version without comparing it first.
+diff --git a/audit/after.json b/audit/after.json
+new file mode 100644
+index 0000000..3762ac0
+--- /dev/null
++++ b/audit/after.json
+@@ -0,0 +1,172 @@
++{
++  "units": {
++    "unit1": {
++      "vocabularyRecords": 104,
++      "questionRecords": 190,
++      "uniqueEligible": 190,
++      "grammar": 50,
++      "vocabulary": 124,
++      "examSkills": 16,
++      "examPool": 190,
++      "exerciseTypes": {
++        "verb-forms": 45,
++        "multiple-choice": 104,
++        "gap-filling": 15,
++        "word-formation": 5,
++        "sentence-transformation": 5,
++        "cloze-test": 6,
++        "sentence-arrangement": 3,
++        "reading-comprehension": 7
++      },
++      "duplicateIds": [],
++      "duplicateContent": [],
++      "missingAnswers": [],
++      "missingExplanations": [],
++      "missingTopic": 0,
++      "missingDifficulty": 0,
++      "missingSource": 0,
++      "invalidQuestions": []
++    },
++    "unit2": {
++      "vocabularyRecords": 109,
++      "questionRecords": 125,
++      "uniqueEligible": 123,
++      "grammar": 16,
++      "vocabulary": 107,
++      "examSkills": 0,
++      "examPool": 123,
++      "exerciseTypes": {
++        "verb-forms": 16,
++        "multiple-choice": 107
++      },
++      "duplicateIds": [],
++      "duplicateContent": [
++        {
++          "key": "curfew có nghĩa là gì / what does curfew mean",
++          "ids": [
++            "unit2-v-u2-008",
++            "unit2-v-u2-088"
++          ]
++        },
++        {
++          "key": "open-minded có nghĩa là gì / what does open-minded mean",
++          "ids": [
++            "unit2-v-u2-009",
++            "unit2-v-u2-090"
++          ]
++        }
++      ],
++      "missingAnswers": [],
++      "missingExplanations": [],
++      "missingTopic": 0,
++      "missingDifficulty": 0,
++      "missingSource": 0,
++      "invalidQuestions": []
++    },
++    "unit3": {
++      "vocabularyRecords": 120,
++      "questionRecords": 136,
++      "uniqueEligible": 136,
++      "grammar": 16,
++      "vocabulary": 120,
++      "examSkills": 0,
++      "examPool": 136,
++      "exerciseTypes": {
++        "verb-forms": 16,
++        "multiple-choice": 120
++      },
++      "duplicateIds": [],
++      "duplicateContent": [],
++      "missingAnswers": [],
++      "missingExplanations": [],
++      "missingTopic": 0,
++      "missingDifficulty": 0,
++      "missingSource": 0,
++      "invalidQuestions": []
++    },
++    "unit4": {
++      "vocabularyRecords": 137,
++      "questionRecords": 153,
++      "uniqueEligible": 153,
++      "grammar": 16,
++      "vocabulary": 137,
++      "examSkills": 0,
++      "examPool": 153,
++      "exerciseTypes": {
++        "verb-forms": 16,
++        "multiple-choice": 137
++      },
++      "duplicateIds": [],
++      "duplicateContent": [],
++      "missingAnswers": [],
++      "missingExplanations": [],
++      "missingTopic": 0,
++      "missingDifficulty": 0,
++      "missingSource": 0,
++      "invalidQuestions": []
++    }
++  },
++  "global": {
++    "records": 604,
++    "uniqueEligible": 596,
++    "duplicateIds": [],
++    "duplicateContent": [
++      {
++        "key": "strong có nghĩa là gì / what does strong mean",
++        "ids": [
++          "unit1-v-u1-088",
++          "unit4-v-u4-023"
++        ]
++      },
++      {
++        "key": "strengthen có nghĩa là gì / what does strengthen mean",
++        "ids": [
++          "unit1-v-u1-089",
++          "unit4-v-u4-074"
++        ]
++      },
++      {
++        "key": "curfew có nghĩa là gì / what does curfew mean",
++        "ids": [
++          "unit2-v-u2-008",
++          "unit2-v-u2-088"
++        ]
++      },
++      {
++        "key": "open-minded có nghĩa là gì / what does open-minded mean",
++        "ids": [
++          "unit2-v-u2-009",
++          "unit2-v-u2-090"
++        ]
++      },
++      {
++        "key": "quality có nghĩa là gì / what does quality mean",
++        "ids": [
++          "unit2-v-u2-017",
++          "unit3-v-u3-049"
++        ]
++      },
++      {
++        "key": "culture có nghĩa là gì / what does culture mean",
++        "ids": [
++          "unit2-v-u2-029",
++          "unit4-v-u4-017"
++        ]
++      },
++      {
++        "key": "care about có nghĩa là gì / what does care about mean",
++        "ids": [
++          "unit2-v-u2-055",
++          "unit3-v-u3-081"
++        ]
++      },
++      {
++        "key": "depend on có nghĩa là gì / what does depend on mean",
++        "ids": [
++          "unit2-v-u2-057",
++          "unit4-v-u4-088"
++        ]
++      }
++    ]
++  }
++}
+\ No newline at end of file
+diff --git a/audit/after.mjs b/audit/after.mjs
+new file mode 100644
+index 0000000..aa2d3ee
+--- /dev/null
++++ b/audit/after.mjs
+@@ -0,0 +1,13 @@
++import {readFileSync,writeFileSync} from 'node:fs';
++import {getQuestionBank} from '../src/question-bank.mjs';
++import {uniqueValidQuestions,contentKey} from '../src/smart-replay.mjs';
++const src=readFileSync('src/App.jsx','utf8');
++const datasets=Function(src.slice(src.indexOf('const UNIT_1_VERIFIED_WORDS'),src.indexOf('const TRANSLATIONS'))+';return VOCABULARY_DATASETS;')();
++const duplicates=(arr,key)=>Object.entries(Object.groupBy(arr,key)).filter(([_,v])=>v.length>1).map(([key,v])=>({key,ids:v.map(q=>q.id)}));
++let all=[];
++const units=Object.fromEntries(Object.entries(datasets).map(([unit,words])=>{
++ const bank=getQuestionBank(unit,words),valid=uniqueValidQuestions(bank);all.push(...bank);
++ return [unit,{vocabularyRecords:words.length,questionRecords:bank.length,uniqueEligible:valid.length,grammar:valid.filter(q=>q.kind==='grammar').length,vocabulary:valid.filter(q=>q.kind==='vocabulary').length,examSkills:valid.filter(q=>q.kind==='exam').length,examPool:valid.length,exerciseTypes:Object.fromEntries(Object.entries(Object.groupBy(valid,q=>q.exerciseType)).map(([k,v])=>[k,v.length])),duplicateIds:duplicates(bank,q=>q.id),duplicateContent:duplicates(bank,contentKey),missingAnswers:bank.filter(q=>!q.correct).map(q=>q.id),missingExplanations:bank.filter(q=>!q.explanation).map(q=>q.id),missingTopic:bank.filter(q=>!q.topic).length,missingDifficulty:bank.filter(q=>!q.difficulty).length,missingSource:bank.filter(q=>!q.sourceRef).length,invalidQuestions:bank.filter(q=>!uniqueValidQuestions([q]).length).map(q=>q.id)}];
++}));
++const report={units,global:{records:all.length,uniqueEligible:uniqueValidQuestions(all).length,duplicateIds:duplicates(all,q=>q.id),duplicateContent:duplicates(all,contentKey)}};
++writeFileSync('audit/after.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
+diff --git a/audit/baseline.mjs b/audit/baseline.mjs
+new file mode 100644
+index 0000000..f42a53b
+--- /dev/null
++++ b/audit/baseline.mjs
+@@ -0,0 +1,10 @@
++import {readFileSync,writeFileSync} from 'node:fs';
++import {GRAMMAR_BANK,buildBank} from '../src/learning-data.mjs';
++const src=readFileSync('src/App.jsx','utf8');
++const words=Function(src.slice(src.indexOf('const UNIT_1_VERIFIED_WORDS'),src.indexOf('const TRANSLATIONS'))+';return VOCABULARY_DATASETS;')();
++const norm=s=>s.normalize('NFKC').toLowerCase().replace(/[“”"'‘’.,!?;:]/g,'').replace(/\s+/g,' ').trim();
++const duplicates=(arr,key)=>Object.entries(Object.groupBy(arr,key)).filter(([_,v])=>v.length>1).map(([key,v])=>({key,ids:v.map(q=>q.id)}));
++const units=Object.fromEntries(Object.entries(words).map(([unit,w])=>{
++ const bank=buildBank(unit,w);return [unit,{vocabularyRecords:w.length,grammar:GRAMMAR_BANK[unit].length,vocabulary:bank.filter(q=>q.kind==='vocabulary').length,examPool:bank.length,exerciseTypes:{'multiple-choice':bank.length},uniqueContent:new Set(bank.map(q=>norm(q.prompt))).size,duplicateIds:duplicates(bank,q=>q.id),duplicateContent:duplicates(bank,q=>norm(q.prompt)),missingAnswers:bank.filter(q=>!q.correct).map(q=>q.id),missingExplanations:bank.filter(q=>!q.explanation).map(q=>q.id),missingTopic:bank.filter(q=>!q.topic).length,missingDifficulty:bank.filter(q=>!q.difficulty).length,missingSource:bank.filter(q=>!q.sourceRef).length}];
++}));
++const report={commit:'29e0598c8d3a1360a1db526946b68ca00e244f4f',units};writeFileSync('audit/before.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
+diff --git a/audit/before.json b/audit/before.json
+new file mode 100644
+index 0000000..e171779
+--- /dev/null
++++ b/audit/before.json
+@@ -0,0 +1,88 @@
++{
++  "commit": "29e0598c8d3a1360a1db526946b68ca00e244f4f",
++  "units": {
++    "unit1": {
++      "vocabularyRecords": 104,
++      "grammar": 16,
++      "vocabulary": 104,
++      "examPool": 120,
++      "exerciseTypes": {
++        "multiple-choice": 120
++      },
++      "uniqueContent": 120,
++      "duplicateIds": [],
++      "duplicateContent": [],
++      "missingAnswers": [],
++      "missingExplanations": [],
++      "missingTopic": 120,
++      "missingDifficulty": 120,
++      "missingSource": 120
++    },
++    "unit2": {
++      "vocabularyRecords": 109,
++      "grammar": 16,
++      "vocabulary": 109,
++      "examPool": 125,
++      "exerciseTypes": {
++        "multiple-choice": 125
++      },
++      "uniqueContent": 123,
++      "duplicateIds": [],
++      "duplicateContent": [
++        {
++          "key": "curfew có nghĩa là gì / what does curfew mean",
++          "ids": [
++            "unit2-v-u2-008",
++            "unit2-v-u2-088"
++          ]
++        },
++        {
++          "key": "open-minded có nghĩa là gì / what does open-minded mean",
++          "ids": [
++            "unit2-v-u2-009",
++            "unit2-v-u2-090"
++          ]
++        }
++      ],
++      "missingAnswers": [],
++      "missingExplanations": [],
++      "missingTopic": 125,
++      "missingDifficulty": 125,
++      "missingSource": 125
++    },
++    "unit3": {
++      "vocabularyRecords": 120,
++      "grammar": 16,
++      "vocabulary": 120,
++      "examPool": 136,
++      "exerciseTypes": {
++        "multiple-choice": 136
++      },
++      "uniqueContent": 136,
++      "duplicateIds": [],
++      "duplicateContent": [],
++      "missingAnswers": [],
++      "missingExplanations": [],
++      "missingTopic": 136,
++      "missingDifficulty": 136,
++      "missingSource": 136
++    },
++    "unit4": {
++      "vocabularyRecords": 137,
++      "grammar": 16,
++      "vocabulary": 137,
++      "examPool": 153,
++      "exerciseTypes": {
++        "multiple-choice": 153
++      },
++      "uniqueContent": 153,
++      "duplicateIds": [],
++      "duplicateContent": [],
++      "missingAnswers": [],
++      "missingExplanations": [],
++      "missingTopic": 153,
++      "missingDifficulty": 153,
++      "missingSource": 153
++    }
++  }
++}
+\ No newline at end of file
+diff --git a/audit/source-manifest.json b/audit/source-manifest.json
+new file mode 100644
+index 0000000..aea906e
+--- /dev/null
++++ b/audit/source-manifest.json
+@@ -0,0 +1,36 @@
++{
++  "sources": [
++    {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "sha256": "cacdfde44694ec42d3213786135c03b1df7703c17104be97dbfb2d0b19dbfbc2",
++      "paragraphs": 605
++    },
++    {
++      "filename": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "sha256": "5ef37d3d03f5135c940099b302f71d94c99484964d6edcb3ec701d4ea66736ba",
++      "paragraphs": 159
++    },
++    {
++      "filename": "TỜ SỐ 03 TEST 02 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "sha256": "287d5223102d2530e2c66a166188b3fa897fa2705c4e77d95096217a1e7f1897",
++      "paragraphs": 183
++    },
++    {
++      "filename": "TỜ SỐ 04 TEST 03 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "sha256": "cca270be59e9b58f8e271a1aaf91e271ea94639d91ee73756b3ea071f84e8c12",
++      "paragraphs": 179
++    }
++  ],
++  "importedQuestionCount": 70,
++  "importedFrom": [
++    "TỜ SỐ 01",
++    "TỜ SỐ 02"
++  ],
++  "reviewNotes": [
++    "Tờ 03 and 04 inspected but not imported in this first Unit 1 release.",
++    "No answer key was supplied. Answers and Vietnamese explanations independently checked.",
++    "Known excluded: Ex1 Q3 missing option; Q18 duplicate options and duplicate of Q74; Q39 duplicate options; Q40 multiple valid answers; Q48 missing option; Q49 malformed stem; Q52/Q68 multiple valid tense answers; Q57 malformed stem; Q102 two possible meanings; Q105 missing options; Q113 both to jog and jogging valid.",
++    "No new question has been generated to fill requested session sizes.",
++    "Original prompts and choices retained except whitespace. Transformation instructions and Vietnamese explanations added. Reading passage has one documented correction: complain for a lack of sleep -> complain about a lack of sleep. Source question 32 about that phrase is excluded."
++  ]
++}
+\ No newline at end of file
+diff --git a/scripts/package-deliverables.mjs b/scripts/package-deliverables.mjs
+new file mode 100644
+index 0000000..30dd881
+--- /dev/null
++++ b/scripts/package-deliverables.mjs
+@@ -0,0 +1,13 @@
++import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
++import {execFileSync} from 'node:child_process';
++const read=p=>readFileSync(p,'utf8');
++let app=read('src/App.jsx').replace(/^import[^\n]*from '\.\/[^\n]+\n/gm,'');
++const boundary=app.indexOf('// ==========================================');
++const imports=app.slice(0,boundary),body=app.slice(boundary);
++const flatten=p=>read(p).replace(/^import[^\n]*\n/gm,'').replace(/export default function /g,'function ').replace(/export (function|const) /g,'$1 ');
++const merged=imports+'\n// Phase 3: same targeted source modules, flattened for single-file Canvas use.\n'+flatten('src/learning-data.mjs')+'\n'+`const imported = ${read('src/unit1-source-bank.json')};\n`+flatten('src/question-bank.mjs')+'\n'+flatten('src/smart-replay.mjs')+'\n'+flatten('src/PracticeSetup.jsx')+'\n'+body;
++writeFileSync('dist/GeminiCanvas_App.jsx',merged);
++execFileSync('git',['archive','--format=zip','--output=dist/english-11-phase2-backup.zip','phase2-working-20261028']);
++execFileSync('git',['diff','phase2-working-20261028','--','src','tests','audit','README.md'],{maxBuffer:10*1024*1024,encoding:'utf8',stdio:['ignore','pipe','inherit']});
++const {build}=await import('esbuild');
++await build({stdin:{contents:merged,loader:'jsx',resolveDir:process.cwd()},bundle:true,write:false,external:['react','lucide-react']});
+diff --git a/src/App.jsx b/src/App.jsx
+index 46af96d..b998afe 100644
+--- a/src/App.jsx
++++ b/src/App.jsx
+@@ -1,5 +1,8 @@
++import PracticeSetup from './PracticeSetup.jsx';
++import {getQuestionBank} from './question-bank.mjs';
++import {loadHistory, saveHistory, normalizeHistory, beginSession, submitSession, isCorrect, applyQuizResult, uniqueValidQuestions} from './smart-replay.mjs';
+ import { GRAMMAR, buildBank, drawQuestions, shuffle, normalizeProgress } from './learning-data.mjs';
+-import React, { useState, useEffect, useMemo } from 'react';
++import React, { useState, useEffect, useMemo, useRef } from 'react';
+ import { 
+   BookOpen, Brain, Trophy, Volume2, ArrowLeft, ArrowRight, RotateCw, 
+   CheckCircle2, XCircle, Search, Sparkles, Languages, Save, Download, 
+@@ -661,7 +664,7 @@ export default function App() {
+   const toggleLang = () => setLang(prev => prev === 'vi' ? 'en' : 'vi');
+ 
+   const handleExportBackup = () => {
+-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(userProgress, null, 2));
++    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({...userProgress, practiceHistory:loadHistory()}, null, 2));
+     const downloadAnchor = document.createElement('a');
+     downloadAnchor.setAttribute("href", dataStr);
+     downloadAnchor.setAttribute("download", `es11_an_progress_${new Date().toISOString().slice(0,10)}.json`);
+@@ -679,6 +682,7 @@ export default function App() {
+           const parsed = JSON.parse(e.target.result);
+           if (parsed && typeof parsed === 'object') {
+             setUserProgress(normalizeProgress(parsed));
++            if (parsed.practiceHistory?.version === 1) saveHistory(normalizeHistory(parsed.practiceHistory));
+           }
+         } catch (error) {
+           console.error("Invalid JSON file");
+@@ -1623,7 +1627,7 @@ function MistakesNotebookView({ lang, t, userProgress, setUserProgress, speakWor
+           </h2>
+           <p className="text-xs text-slate-500 mt-1">
+             {lang === 'vi' 
+-              ? 'Tự động lưu các từ vựng bạn làm sai để rèn luyện trọng tâm.' 
++              ? 'Tự động lưu từ vựng và câu luyện tập làm sai để rèn luyện trọng tâm.' 
+               : 'Automatically records incorrect answers for targeted revision.'}
+           </p>
+         </div>
+@@ -1678,6 +1682,8 @@ function MistakesNotebookView({ lang, t, userProgress, setUserProgress, speakWor
+                 </p>
+               </div>
+ 
++              {m.explanation && <p className="text-xs leading-relaxed text-slate-600">{m.explanation}</p>}
++              {m.sourceRef && <p className="text-[10px] text-slate-400">{m.sourceRef}</p>}
+               <div className="text-[10px] text-slate-400 text-right">
+                 {m.date}
+               </div>
+@@ -1690,61 +1696,72 @@ function MistakesNotebookView({ lang, t, userProgress, setUserProgress, speakWor
+ }
+ 
+ 
+-function PracticeQuiz({ bank, lang, setUserProgress, mixed = false, requestedCount = 10, title = 'Luyện tập', download = false }) {
++function PracticeQuiz({ bank, lang, setUserProgress, mixed = false, requestedCount = 20, title = 'Luyện tập', download = false }) {
+   const vi = lang === 'vi';
+-  const makePaper = previous => {
+-    if (!mixed) return drawQuestions(bank, requestedCount, previous);
+-    const grammar = bank.filter(q => q.kind === 'grammar');
+-    const vocab = bank.filter(q => q.kind === 'vocabulary');
+-    return shuffle([...drawQuestions(grammar, Math.ceil(requestedCount / 2), previous), ...drawQuestions(vocab, Math.floor(requestedCount / 2), previous)]);
++  const [settings,setSettings]=useState({unit:bank[0]?.unit||'unit1',focus:mixed?'mixed':'grammar',exerciseType:'mixed',difficulty:'mixed',count:requestedCount,review:false});
++  const [history,setHistory]=useState(()=>loadHistory());
++  const [activeSettings,setActiveSettings]=useState(null);
++  const [paper,setPaper]=useState([]);
++  const [session,setSession]=useState(null);
++  const [answers,setAnswers]=useState({});
++  const [submitted,setSubmitted]=useState(false);
++  const [attempt,setAttempt]=useState(0);
++  const [notice,setNotice]=useState('');
++  const [storageWarning,setStorageWarning]=useState(false);
++  const [shortfall,setShortfall]=useState(null);
++  const submitLock=useRef(false);
++  const score=paper.filter(q=>isCorrect(q,answers[q.id])).length;
++  const answered=paper.filter(q=>String(answers[q.id]??'').trim()).length;
++  const start=(config=settings)=>{
++    const result=beginSession(bank,config);
++    setHistory(result.history);setStorageWarning(!result.saved);
++    if(!result.paper.length){setNotice(vi?'Không có câu phù hợp với cấu hình này.':'No questions match these settings.');return;}
++    setPaper(result.paper);setSession(result.session);setActiveSettings({...config});setAnswers({});setSubmitted(false);setAttempt(n=>n+1);setNotice('');submitLock.current=false;
++    setShortfall(result.paper.length<config.count?{requested:config.count,actual:result.paper.length}:null);
+   };
+-  const [paper, setPaper] = useState(() => makePaper([]));
+-  const [answers, setAnswers] = useState({});
+-  const [submitted, setSubmitted] = useState(false);
+-  const [attempt, setAttempt] = useState(1);
+-  const [notice, setNotice] = useState('');
+-  const score = paper.filter(q => answers[q.id] === q.correct).length;
+-  const answered = paper.filter(q => Object.hasOwn(answers, q.id)).length;
+-  const retry = () => {
+-    setPaper(makePaper(paper)); setAnswers({}); setSubmitted(false); setAttempt(n => n + 1); setNotice('');
++  const submit=()=>{
++    if(submitted||submitLock.current)return;
++    if(answered<paper.length){setNotice(vi?'Hãy trả lời tất cả câu hỏi trước khi nộp bài.':'Please answer every question before submitting.');return;}
++    submitLock.current=true;
++    const result=submitSession(session,paper,answers);
++    setHistory(result.history);setStorageWarning(!result.saved);setSubmitted(true);setNotice('');
++    if(!result.alreadySubmitted)setUserProgress(p=>applyQuizResult(p,paper,answers));
+   };
+-  const submit = () => {
+-    if (submitted) return;
+-    if (answered < paper.length) {setNotice(vi ? 'Hãy trả lời tất cả câu hỏi trước khi nộp bài.' : 'Please answer every question before submitting.'); return;}
+-    setSubmitted(true); setNotice('');
+-    setUserProgress(p => ({...p, xp: (Number(p.xp) || 0) + score * 5}));
+-  };
+-  const exportPaper = () => {
+-    const text = [title, ...paper.map((q, i) => `${i+1}. ${q.prompt}\n${q.options.map((o,j)=>`${'ABCD'[j]}. ${o}`).join('\n')}`), '\nĐÁP ÁN & GIẢI THÍCH / ANSWERS', ...paper.map((q,i)=>`${i+1}. ${'ABCD'[q.options.indexOf(q.correct)]}. ${q.correct}\n${q.explanation}`)].join('\n\n');
+-    const url = URL.createObjectURL(new Blob(['\ufeff'+text], {type:'text/plain;charset=utf-8'}));
+-    const a = document.createElement('a'); a.href=url; a.download='english-11-practice.txt'; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
++  const exportPaper=()=>{
++    const lines=[title,...paper.map((q,i)=>`${i+1}. ${q.passage?`${q.passageTitle}\n${q.passage}\n`:''}${q.prompt}\n${q.options?q.options.map((o,j)=>`${'ABCD'[j]}. ${o}`).join('\n'):'________________________________'}`)];
++    if(submitted)lines.push('\nĐÁP ÁN & GIẢI THÍCH / ANSWERS',...paper.map((q,i)=>`${i+1}. ${q.correct}\n${q.explanation}\n${q.sourceRef}`));
++    const url=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\n\n')],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='english-11-practice.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+   };
++  // Render questions sharing a passage together; never detach reading/cloze items.
++  const groups=[];
++  for(const q of paper){let group=q.passageId?groups.find(g=>g.passageId===q.passageId):null;if(!group){group={passageId:q.passageId,passage:q.passage,passageTitle:q.passageTitle,questions:[]};groups.push(group);}group.questions.push(q);}
++  let displayIndex=0;
+   return <section className="space-y-5" aria-label={title}>
+-    <div className="bg-white rounded-2xl border border-slate-200 p-5 flex flex-wrap items-center justify-between gap-4">
+-      <div><h3 className="font-bold text-lg">{title}</h3><p className="text-sm text-slate-500">{vi ? 'Lượt' : 'Attempt'} {attempt} · {paper.length} {vi ? 'câu / lượt' : 'questions'} · {bank.length} {vi ? 'câu trong ngân hàng' : 'in pool'}</p></div>
+-      <div className="flex gap-2"><button type="button" onClick={retry} className="flex items-center gap-2 rounded-xl bg-teal-700 px-4 py-2 text-white font-semibold hover:bg-teal-800"><RefreshCw size={16}/>{vi ? 'Làm lại' : 'Try again'}</button>{download && <button type="button" onClick={exportPaper} className="rounded-xl border border-slate-300 px-3 py-2 text-sm">{vi ? 'Tải đề + đáp án' : 'Download paper'}</button>}</div>
+-    </div>
+-    <p className="text-sm text-slate-500">{vi ? 'Mỗi lượt ưu tiên câu chưa xuất hiện ở lượt trước; thứ tự câu và đáp án được xáo trộn.' : 'Each attempt prioritizes questions outside the previous paper and shuffles questions and options.'}</p>
+-    <div className="h-2 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={answered} aria-valuemax={paper.length} aria-valuemin={0} aria-label={vi ? 'Tiến độ trả lời' : 'Answer progress'}><div className="h-full bg-teal-500 transition-all" style={{width:`${answered / paper.length * 100}%`}}/></div>
+-    <p className="text-sm font-semibold" aria-live="polite">{answered}/{paper.length} {vi ? 'câu đã trả lời' : 'answered'}</p>
+-    {submitted && <div role="status" className="rounded-2xl bg-teal-50 border border-teal-200 p-5"><h3 className="text-2xl font-bold text-teal-900">{vi ? 'Kết quả' : 'Result'}: {score}/{paper.length} · {Math.round(score / paper.length * 100)}%</h3><p className="text-teal-800 mt-1">+{score*5} XP · {vi ? 'Xem đáp án và giải thích ngay dưới từng câu.' : 'Review each answer and explanation below.'}</p></div>}
+-    {paper.map((q,i) => <fieldset key={`${attempt}-${q.id}`} className="rounded-2xl bg-white border border-slate-200 p-5 min-w-0" disabled={submitted}>
+-      <legend className="float-left w-full mb-4 font-semibold"><span className="text-teal-700 mr-2">{String(i+1).padStart(2,'0')}.</span>{q.prompt}<span className="block text-xs text-slate-400 font-normal mt-2">{q.kind === 'grammar' ? 'Grammar' : 'Vocabulary'}</span></legend>
+-      <div className="clear-both grid sm:grid-cols-2 gap-3">{q.options.map((o,j)=> {
+-        const chosen = answers[q.id] === o; const right = submitted && o === q.correct; const wrong = submitted && chosen && o !== q.correct;
+-        return <label key={o} className={`flex items-start gap-3 rounded-xl border p-3 cursor-pointer ${right ? 'bg-emerald-50 border-emerald-500' : wrong ? 'bg-red-50 border-red-400' : chosen ? 'bg-sky-50 border-sky-500' : 'border-slate-200 hover:bg-slate-50'}`}>
+-          <input type="radio" className="mt-1 accent-teal-700 shrink-0" name={`${attempt}-${q.id}`} value={o} checked={chosen} onChange={()=>{setAnswers(a=>({...a,[q.id]:o})); setNotice('');}}/>
+-          <span><b className="mr-2">{'ABCD'[j]}.</b>{o}{right && <span className="ml-2 font-bold text-emerald-700">✓ {vi ? 'Đúng' : 'Correct'}</span>}{wrong && <span className="ml-2 font-bold text-red-700">✗</span>}</span></label>;
+-      })}</div>
+-      {submitted && <div className="mt-4 rounded-xl bg-slate-50 p-4 text-sm leading-relaxed"><p className="font-bold mb-1">{answers[q.id] === q.correct ? '✓' : '✗'} {vi ? 'Đáp án' : 'Answer'}: {q.correct}</p><p>{q.explanation}</p></div>}
+-    </fieldset>)}
+-    <div className="flex flex-wrap gap-4 items-center pb-4"><button type="button" disabled={submitted} onClick={submit} className="rounded-xl bg-teal-700 px-6 py-3 text-white font-bold disabled:opacity-50">{submitted ? (vi ? 'Đã chấm bài' : 'Submitted') : (vi ? 'Nộp bài & xem giải thích' : 'Submit & review')}</button><span role="alert" className="text-red-700 text-sm">{notice}</span></div>
++    <PracticeSetup bank={bank} lang={lang} settings={settings} onChange={setSettings} onStart={()=>start()} history={history} grammarOnly={!mixed}/>
++    {storageWarning&&<p role="alert" className="rounded-xl bg-amber-50 p-4 text-amber-900 text-sm">{vi?'Trình duyệt không lưu được lịch sử. Lượt này vẫn hoạt động, nhưng ưu tiên câu mới giữa các lần mở ứng dụng không được bảo đảm.':'History could not be saved in this browser. Cross-session replay cannot be guaranteed.'}</p>}
++    {paper.length>0&&<>
++      <div className="bg-white rounded-2xl border border-slate-200 p-5 flex flex-wrap items-center justify-between gap-4"><div><h3 className="font-bold text-lg">{title}</h3><p className="text-sm text-slate-500">{vi?'Lượt':'Attempt'} {attempt} · {paper.length} {vi?'câu / lượt':'questions'} · {uniqueValidQuestions(bank).length} {vi?'câu duy nhất trong ngân hàng':'unique questions in pool'}</p></div><div className="flex flex-wrap gap-2"><button type="button" onClick={()=>start(activeSettings)} className="flex items-center gap-2 rounded-xl bg-teal-700 px-4 py-2 text-white font-semibold hover:bg-teal-800"><RefreshCw size={16}/>{vi?'Làm lại':'Try again'}</button>{download&&<button type="button" onClick={exportPaper} className="rounded-xl border border-slate-300 px-3 py-2 text-sm">{submitted?(vi?'Tải đề + đáp án':'Download paper + answers'):(vi?'Tải đề':'Download paper')}</button>}</div></div>
++      {shortfall&&<p role="status" className="text-sm text-amber-800">{vi?`Chỉ có ${shortfall.actual} câu duy nhất phù hợp trong số ${shortfall.requested} câu đã chọn.`:`Only ${shortfall.actual} unique questions available out of ${shortfall.requested} requested.`}</p>}
++      <p className="text-sm text-slate-500">{vi?'Lịch sử được lưu trên trình duyệt này, dùng chung giữa Grammar và Exam. Khi hết câu mới, câu cũ có thể xuất hiện lại.':'History is saved in this browser and shared by Grammar and Exam. Older questions may repeat after new questions run out.'}</p>
++      <div className="h-2 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={answered} aria-valuemax={paper.length} aria-valuemin={0} aria-label={vi?'Tiến độ trả lời':'Answer progress'}><div className="h-full bg-teal-500 transition-all" style={{width:`${answered/paper.length*100}%`}}/></div><p className="text-sm font-semibold" aria-live="polite">{answered}/{paper.length} {vi?'câu đã trả lời':'answered'}</p>
++      {submitted&&<div role="status" className="rounded-2xl bg-teal-50 border border-teal-200 p-5"><h3 className="text-2xl font-bold text-teal-900">{vi?'Kết quả':'Result'}: {score}/{paper.length} · {Math.round(score/paper.length*100)}%</h3><p className="text-teal-800 mt-1">+{score*5} XP · {vi?'Xem đáp án và giải thích dưới từng câu. Câu sai đã được lưu vào Sổ tay lỗi sai.':'Review explanations below. Incorrect answers are saved in Mistake Notebook.'}</p></div>}
++      {groups.map((group,g)=><div key={group.passageId||g} className="space-y-4">
++        {group.passage&&<article aria-label={group.passageTitle} className="rounded-2xl border border-sky-200 bg-sky-50 p-5"><h4 className="font-bold text-sky-950 mb-3">{group.passageTitle}</h4><p className="whitespace-pre-line leading-relaxed text-sm">{group.passage}</p></article>}
++        {group.questions.map(q=>{const i=displayIndex++;return <fieldset data-question-id={q.id} key={`${session.id}-${q.id}`} className="rounded-2xl bg-white border border-slate-200 p-5 min-w-0" disabled={submitted}>
++          <legend className="float-left w-full mb-4 font-semibold whitespace-pre-line"><span className="text-teal-700 mr-2">{String(i+1).padStart(2,'0')}.</span>{q.prompt}<span className="block text-xs text-slate-400 font-normal mt-2">{q.exerciseType} · {q.difficulty}</span></legend>
++          {q.options?<div className="clear-both grid sm:grid-cols-2 gap-3">{q.options.map((o,j)=>{const chosen=answers[q.id]===o,right=submitted&&o===q.correct,wrong=submitted&&chosen&&!right;return <label key={o} className={`flex items-start gap-3 rounded-xl border p-3 cursor-pointer ${right?'bg-emerald-50 border-emerald-500':wrong?'bg-red-50 border-red-400':chosen?'bg-sky-50 border-sky-500':'border-slate-200 hover:bg-slate-50'}`}><input type="radio" className="mt-1 accent-teal-700 shrink-0" name={`${session.id}-${q.id}`} value={o} checked={chosen} onChange={()=>{setAnswers(a=>({...a,[q.id]:o}));setNotice('');}}/><span><b className="mr-2">{'ABCD'[j]}.</b>{o}{right&&<span className="ml-2 font-bold text-emerald-700">✓ {vi?'Đúng':'Correct'}</span>}{wrong&&<span className="ml-2 font-bold text-red-700">✗</span>}</span></label>;})}</div>:<div className="clear-both"><label className="text-sm text-slate-500">{vi?'Câu trả lời của bạn':'Your answer'}<input type="text" autoComplete="off" className="mt-2 block w-full border border-slate-300 rounded-xl p-3 text-slate-900" value={answers[q.id]||''} onChange={e=>{setAnswers(a=>({...a,[q.id]:e.target.value}));setNotice('');}}/></label></div>}
++          {submitted&&<div className="mt-4 rounded-xl bg-slate-50 p-4 text-sm leading-relaxed"><p className="font-bold mb-1">{isCorrect(q,answers[q.id])?'✓':'✗'} {vi?'Đáp án':'Answer'}: {q.correct}</p><p>{q.explanation}</p><p className="text-xs text-slate-500 mt-3">{q.sourceRef}</p>{q.acceptedAnswers?.length>1&&<p className="text-xs text-slate-500 mt-2">{vi?'Các cách viết được chấp nhận':'Accepted variants'}: {q.acceptedAnswers.join(' / ')}</p>}</div>}
++        </fieldset>;})}
++      </div>)}
++      <div className="flex flex-wrap gap-4 items-center pb-4"><button type="button" disabled={submitted} onClick={submit} className="rounded-xl bg-teal-700 px-6 py-3 text-white font-bold disabled:opacity-50">{submitted?(vi?'Đã chấm bài':'Submitted'):(vi?'Nộp bài & xem giải thích':'Submit & review')}</button><span role="alert" className="text-red-700 text-sm">{notice}</span></div>
++    </>}
++    {!paper.length&&notice&&<p role="alert" className="text-red-700 text-sm">{notice}</p>}
+   </section>;
+ }
+ 
+ function GrammarLabView({ lang, selectedUnitId, setUserProgress }) {
+   const topic = GRAMMAR[selectedUnitId];
+-  const bank = useMemo(()=>buildBank(selectedUnitId, VOCABULARY_DATASETS[selectedUnitId]).filter(q=>q.kind === 'grammar'),[selectedUnitId]);
++  const bank = useMemo(()=>getQuestionBank(selectedUnitId, VOCABULARY_DATASETS[selectedUnitId]).filter(q=>q.kind === 'grammar'),[selectedUnitId]);
+   return <div className="space-y-6">
+     <div className="rounded-3xl bg-gradient-to-br from-teal-800 to-sky-800 p-6 sm:p-8 text-white"><p className="text-xs font-bold uppercase tracking-widest text-teal-200 mb-2">Grammar Lab · {selectedUnitId.replace('unit','Unit ')}</p><h2 className="text-2xl sm:text-3xl font-extrabold">{topic.title}</h2><p className="mt-2 text-lg text-teal-100">{topic.subtitle}</p><p className="mt-4 max-w-3xl text-sm leading-relaxed text-teal-50">{topic.intro}</p></div>
+     <p className="text-sm text-slate-500">{lang === 'vi' ? 'Giải thích bằng tiếng Việt · Ví dụ bằng tiếng Anh · Mở từng mục để học kỹ hơn.' : 'Vietnamese explanations · English examples · Expand each lesson for details.'}</p>
+@@ -1755,24 +1772,16 @@ function GrammarLabView({ lang, selectedUnitId, setUserProgress }) {
+       <div className="bg-rose-50 rounded-xl p-4"><h4 className="font-bold text-rose-800 mb-2">Lỗi thường gặp · Common mistakes</h4>{r.mistakes.map(e=><p key={e} className="my-2">{e}</p>)}</div>
+       <div className="bg-amber-50 rounded-xl p-4"><h4 className="font-bold text-amber-900 mb-1">Ghi nhớ & phân biệt · Key distinction</h4><p>{r.tip}</p></div>
+     </div></details>)}
+-    <PracticeQuiz key={selectedUnitId} bank={bank} lang={lang} setUserProgress={setUserProgress} requestedCount={5} title={lang === 'vi' ? 'Kiểm tra ngữ pháp' : 'Grammar check'}/>
++    <PracticeQuiz key={selectedUnitId} bank={bank} lang={lang} setUserProgress={setUserProgress} requestedCount={10} title={lang === 'vi' ? 'Kiểm tra ngữ pháp' : 'Grammar check'}/>
+   </div>;
+ }
+ 
+ function ExamPracticeView({lang, selectedUnitId, setUserProgress}) {
+-  const [mode,setMode] = useState('mixed');
+-  const [count,setCount] = useState(10);
+-  const all = useMemo(()=>buildBank(selectedUnitId,VOCABULARY_DATASETS[selectedUnitId]),[selectedUnitId]);
+-  const bank = useMemo(()=>mode === 'mixed' ? all : all.filter(q=>q.kind===mode),[all,mode]);
++  const bank = useMemo(()=>getQuestionBank(selectedUnitId,VOCABULARY_DATASETS[selectedUnitId]),[selectedUnitId]);
+   const vi = lang === 'vi';
+   return <div className="space-y-6">
+     <div className="rounded-3xl bg-gradient-to-br from-sky-900 to-teal-800 p-6 sm:p-8 text-white"><p className="text-xs font-bold uppercase tracking-widest text-teal-200">Practice · {selectedUnitId.replace('unit','Unit ')}</p><h2 className="text-3xl font-extrabold mt-2">{vi ? 'Luyện thi, vững từng bước.' : 'Practice. Learn. Try again.'}</h2><p className="text-sky-100 mt-3 text-sm">{vi ? 'Luyện tập theo Unit, tự chấm điểm và hiểu vì sao đáp án đúng.' : 'Practice by unit, check your score and understand each answer.'}</p></div>
+-    <div className="flex flex-wrap gap-4 items-end bg-white border border-slate-200 rounded-2xl p-5">
+-      <label className="text-sm font-semibold flex-1 min-w-48">{vi ? 'Nội dung' : 'Focus'}<select value={mode} onChange={e=>setMode(e.target.value)} className="block mt-2 w-full rounded-xl border border-slate-300 p-3 bg-white"><option value="mixed">{vi ? 'Tổng hợp · Grammar + Vocabulary' : 'Mixed · Grammar + Vocabulary'}</option><option value="grammar">{vi ? 'Ngữ pháp' : 'Grammar'}</option><option value="vocabulary">{vi ? 'Từ vựng' : 'Vocabulary'}</option></select></label>
+-      <label className="text-sm font-semibold">{vi ? 'Số câu mỗi lượt' : 'Paper length'}<select value={count} onChange={e=>setCount(Number(e.target.value))} className="block mt-2 rounded-xl border border-slate-300 p-3 bg-white">{[5,10,20].map(n=><option key={n} value={n}>{n} {vi ? 'câu' : 'questions'}</option>)}</select></label>
+-    </div>
+-    {mode==='grammar' && count>bank.length && <p className="text-sm text-amber-800">{vi ? `Unit này có ${bank.length} câu ngữ pháp; đề sẽ lấy đủ ${bank.length} câu.` : `This unit has ${bank.length} grammar questions; all will be included.`}</p>}
+-    <PracticeQuiz key={`${selectedUnitId}-${mode}-${count}`} bank={bank} lang={lang} setUserProgress={setUserProgress} requestedCount={count} mixed={mode==='mixed'} download title={vi ? 'Đề luyện tập' : 'Practice paper'}/>
++    <PracticeQuiz key={selectedUnitId} bank={bank} lang={lang} setUserProgress={setUserProgress} requestedCount={20} mixed download title={vi ? 'Đề luyện tập' : 'Practice paper'}/>
+   </div>;
+ }
+ 
+diff --git a/src/PracticeSetup.jsx b/src/PracticeSetup.jsx
+new file mode 100644
+index 0000000..919ebef
+--- /dev/null
++++ b/src/PracticeSetup.jsx
+@@ -0,0 +1,34 @@
++import React from 'react';
++import {eligibleQuestions,uniqueValidQuestions} from './smart-replay.mjs';
++const typeLabels={
++  'multiple-choice':['Trắc nghiệm nghĩa','Meaning MCQ'],
++  'word-formation':['Dạng từ','Word formation'],
++  'verb-forms':['Dạng động từ','Verb forms'],
++  'gap-filling':['Điền vào chỗ trống','Gap filling'],
++  'sentence-transformation':['Viết lại câu','Sentence transformation'],
++  'sentence-arrangement':['Sắp xếp câu','Sentence arrangement'],
++  'reading-comprehension':['Đọc hiểu','Reading comprehension'],
++  'cloze-test':['Đọc điền từ','Cloze test']
++};
++export default function PracticeSetup({bank,lang,settings,onChange,onStart,history,grammarOnly=false}) {
++  const vi=lang==='vi';
++  const available=eligibleQuestions(bank,settings,history);
++  const unseen=available.filter(q=>!history.questions[q.id]?.seenCount).length;
++  const neverAttempted=available.filter(q=>!history.questions[q.id]?.attempts).length;
++  const types=[...new Set(uniqueValidQuestions(bank).filter(q=>settings.focus==='mixed'||q.kind===settings.focus).map(q=>q.exerciseType))];
++  const patch=values=>onChange({...settings,...values});
++  return <section aria-label="Practice Setup" className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
++    <div><h3 className="font-bold text-lg text-teal-900">{vi?'Thiết lập luyện tập':'Practice Setup'}</h3><p className="text-sm text-slate-500 mt-1">{settings.unit.replace('unit','Unit ')} · {vi?'Chọn cấu hình rồi bắt đầu một lượt mới.':'Choose settings, then start a new session.'}</p></div>
++    <div className="flex flex-wrap gap-4 items-end">
++      {!grammarOnly && <label className="text-sm font-semibold flex-1 min-w-40">{vi?'Nội dung':'Focus'}<select value={settings.focus} onChange={e=>patch({focus:e.target.value,exerciseType:'mixed'})} className="block mt-2 w-full rounded-xl border border-slate-300 p-3 bg-white"><option value="mixed">{vi?'Tổng hợp · Grammar + Vocabulary + Exam':'Mixed · Grammar + Vocabulary + Exam'}</option><option value="grammar">{vi?'Ngữ pháp':'Grammar'}</option><option value="vocabulary">{vi?'Từ vựng':'Vocabulary'}</option><option value="exam">{vi?'Bài đọc & dạng đề thi':'Reading & exam skills'}</option></select></label>}
++      <label className="text-sm font-semibold flex-1 min-w-40">{vi?'Dạng bài':'Exercise type'}<select value={settings.exerciseType} onChange={e=>patch({exerciseType:e.target.value})} className="block mt-2 w-full rounded-xl border border-slate-300 p-3 bg-white"><option value="mixed">{vi?'Hỗn hợp':'Mixed'}</option>{types.map(type=><option key={type} value={type}>{typeLabels[type]?.[vi?0:1]||type}</option>)}</select></label>
++      <label className="text-sm font-semibold">{vi?'Độ khó':'Difficulty'}<select value={settings.difficulty} onChange={e=>patch({difficulty:e.target.value})} className="block mt-2 rounded-xl border border-slate-300 p-3 bg-white">{['mixed','easy','medium','hard'].map((v,i)=><option key={v} value={v}>{(vi?['Hỗn hợp','Dễ','Trung bình','Khó']:['Mixed','Easy','Medium','Hard'])[i]}</option>)}</select></label>
++      <label className="text-sm font-semibold">{vi?'Số câu mỗi lượt':'Paper length'}<select value={settings.count} onChange={e=>patch({count:Number(e.target.value)})} className="block mt-2 rounded-xl border border-slate-300 p-3 bg-white">{[5,10,20,30].map((n,i)=><option key={n} value={n}>{n} · {(vi?['Lượt ngắn','Nhanh','Tiêu chuẩn','Chuyên sâu']:['Short','Quick Practice','Standard Practice','Intensive Practice'])[i]}</option>)}</select></label>
++    </div>
++    <label className="text-sm flex gap-2 items-center"><input type="checkbox" checked={settings.review} onChange={e=>patch({review:e.target.checked})} className="accent-teal-700"/>{vi?'Ôn lỗi sai · Review Mistakes':'Review Mistakes'}</label>
++    <p className="text-sm text-slate-600" aria-live="polite">{vi?`${available.length} câu hợp lệ, duy nhất · ${unseen} câu chưa từng xuất hiện · ${neverAttempted} câu chưa làm.`:`${available.length} valid unique questions · ${unseen} never seen · ${neverAttempted} never attempted.`}</p>
++    {available.length<settings.count && <p role="status" className="text-sm text-amber-800">{vi?`Bạn chọn ${settings.count} câu; chỉ có ${available.length} câu phù hợp. Lượt này sẽ có ${available.length} câu, không thêm câu giả hoặc lặp câu.`:`Requested ${settings.count}; only ${available.length} match. This session will contain ${available.length} questions, with no filler or duplicates.`}</p>}
++    <div className="flex flex-wrap items-center gap-4"><button type="button" disabled={!available.length} onClick={onStart} className="rounded-xl bg-teal-700 px-5 py-3 text-white font-bold disabled:opacity-50">{vi?'Bắt đầu luyện tập':'Start practice'}</button><p className="text-xs text-slate-500">{vi?'Ưu tiên câu chưa làm, sau đó câu lâu chưa gặp. Câu sai được ưu tiên ở chế độ ôn lỗi sai.':'Prioritizes unattempted questions, then older questions. Review Mistakes targets incorrect answers.'}</p></div>
++    {!available.length && <p className="text-sm text-slate-600">{vi?'Không có câu phù hợp. Hãy đổi bộ lọc; nếu đang ôn lỗi sai, hiện chưa có lỗi chưa sửa trong nhóm này.':'No questions match. Change filters; Review Mistakes only includes unresolved errors.'}</p>}
++  </section>;
++}
+diff --git a/src/learning-data.mjs b/src/learning-data.mjs
+index 918620a..63e6fe3 100644
+--- a/src/learning-data.mjs
++++ b/src/learning-data.mjs
+@@ -192,9 +192,10 @@ export function buildBank(unit, words) {
+ export function normalizeProgress(data) {
+   if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Invalid progress');
+   return {
++    ...data,
+     masteredWords: Array.isArray(data.masteredWords) ? [...new Set(data.masteredWords.filter(x=>typeof x==='string'))] : [],
+     reviewWords: Array.isArray(data.reviewWords) ? data.reviewWords.filter(x=>typeof x==='string') : [],
+-    mistakesNotebook: Array.isArray(data.mistakesNotebook) ? data.mistakesNotebook.filter(x=>x && typeof x==='object' && typeof x.wordId==='string') : [],
++    mistakesNotebook: Array.isArray(data.mistakesNotebook) ? data.mistakesNotebook.filter(x=>x && typeof x==='object' && (typeof x.wordId==='string' || typeof x.questionId==='string')) : [],
+     xp: Number.isFinite(data.xp) && data.xp >= 0 ? data.xp : 0,
+     streak: Number.isFinite(data.streak) && data.streak >= 0 ? data.streak : 0
+   };
+diff --git a/src/question-bank.mjs b/src/question-bank.mjs
+new file mode 100644
+index 0000000..924c5ed
+--- /dev/null
++++ b/src/question-bank.mjs
+@@ -0,0 +1,45 @@
++import imported from './unit1-source-bank.json' with {type:'json'};
++import {buildBank, GRAMMAR} from './learning-data.mjs';
++
++// Stable IDs from Phase 2 are retained. Legacy provenance is explicitly distinguished
++// from newly checked DOCX imports; no document question numbers are invented.
++const family=w=>{
++  const term=w.word.toLowerCase();
++  if(/(?:fit|health|in (?:good )?shape|well-being)/.test(term))return 'health-and-fitness';
++  if(/recipe/.test(term))return 'recipe';
++  if(/germ|bacteri|microorganism/.test(term))return 'microbes';
++  return term;
++};
++const stopWords=new Set(['sự','các','một','của','việc','những','với','cho','làm','cách','người','điều','thứ','được']);
++const meaningTokens=w=>new Set(w.vietnamese.toLowerCase().normalize('NFKC').replace(/[^\p{L}\p{N} ]/gu,' ').split(/\s+/).filter(t=>t.length>1&&!stopWords.has(t)));
++function meaningOptions(word,words) {
++  const tokens=meaningTokens(word);
++  const anchors=['recipe','treadmill','diameter','energy','ingredient','nutritious','infectious','repetitive','regular','mental','physical'];
++  const candidates=[...words].sort((a,b)=>{
++    const score=w=>(w.pos===word.pos?0:100)+(anchors.includes(w.word)?anchors.indexOf(w.word):50);
++    return score(a)-score(b);
++  });
++  const choices=[word.vietnamese];
++  for(const candidate of candidates){
++    if(candidate.id===word.id||family(candidate)===family(word)||choices.includes(candidate.vietnamese))continue;
++    // Avoid shared content words and known equivalent meanings, e.g. healthy/fit.
++    if([...meaningTokens(candidate)].some(t=>tokens.has(t)))continue;
++    choices.push(candidate.vietnamese);if(choices.length===4)break;
++  }
++  // A short validated bank is returned honestly; the selector rejects incomplete MCQs.
++  return choices;
++}
++
++export function getQuestionBank(unit, words) {
++  const byId = new Map(words.map(w=>[w.id,w]));
++  const legacy = buildBank(unit, words).map(q=>{
++    const word=byId.get(q.wordId);
++    return {...q, ...(word?{options:meaningOptions(word,words)}:{}), topic:q.kind==='grammar' ? GRAMMAR[unit].title : 'Vocabulary: '+word.word,
++      exerciseType:q.kind==='grammar' ? 'verb-forms' : 'multiple-choice',
++      difficulty:word?.difficulty || 'medium', content:q.prompt, correctAnswer:q.correct,
++      sourceRef:q.kind==='grammar' ? `Existing English Success 11 · Phase 2 authored item · ${q.id}` : `Existing vocabulary record ${word.id}; generated meaning prompt · ${word.sourceRef} (source label retained from supplied app)`,
++      source:{origin:'existing-app',recordId:q.id,documentVerified:false},validated:true};
++  });
++  return [...legacy,...imported.filter(q=>q.unit===unit)];
++}
++export const UNIT1_SOURCE_QUESTIONS = imported;
+diff --git a/src/smart-replay.mjs b/src/smart-replay.mjs
+new file mode 100644
+index 0000000..f18f8c1
+--- /dev/null
++++ b/src/smart-replay.mjs
+@@ -0,0 +1,98 @@
++import {shuffle} from './learning-data.mjs';
++export const HISTORY_KEY='es11_question_history_v1';
++export const PROGRESS_KEY='es11_student_an_progress';
++const emptyHistory=()=>({version:1,questions:{},sessions:[]});
++let memoryHistory=emptyHistory();
++export const normalizeText=value=>String(value??'').normalize('NFKC').toLowerCase().replace(/[’‘]/g,"'").replace(/\s+/g,' ').trim();
++export const contentKey=q=>normalizeText(`${q.passage || ''}\n${q.prompt}`).replace(/[“”".,!?;:]/g,'');
++export function validateQuestion(q) {
++  const required=['id','unit','topic','exerciseType','difficulty','prompt','correct','explanation','sourceRef'];
++  if(required.some(k=>typeof q[k]!=='string'||!q[k].trim())) return false;
++  if(!['easy','medium','hard'].includes(q.difficulty)||q.validated!==true) return false;
++  if(q.options) return q.options.length===4 && new Set(q.options.map(normalizeText)).size===q.options.length && q.options.filter(o=>o===q.correct).length===1;
++  return Array.isArray(q.acceptedAnswers) && q.acceptedAnswers.includes(q.correct);
++}
++export function uniqueValidQuestions(bank) {
++  const ids=new Set(),content=new Set();
++  return bank.filter(q=>{
++    if(!validateQuestion(q)||ids.has(q.id)||content.has(contentKey(q)))return false;
++    ids.add(q.id);content.add(contentKey(q));return true;
++  });
++}
++export function normalizeHistory(data) {
++  if(!data||data.version!==1||!data.questions||typeof data.questions!=='object'||Array.isArray(data.questions)||!Array.isArray(data.sessions)) return emptyHistory();
++  // Retain unknown history fields for forward compatibility.
++  return {...data, questions:{...data.questions},sessions:[...data.sessions]};
++}
++function browserStorage() {try{return globalThis.localStorage;}catch{return null;}}
++export function loadHistory(storage=browserStorage()) {
++  try {
++    const saved=storage?.getItem(HISTORY_KEY);
++    const history=saved ? normalizeHistory(JSON.parse(saved)) : storage ? emptyHistory() : normalizeHistory(memoryHistory);
++    // Existing vocabulary mistakes are real prior errors and remain reviewable.
++    const progress=JSON.parse(storage?.getItem(PROGRESS_KEY)||'{}');
++    for(const m of (Array.isArray(progress.mistakesNotebook) ? progress.mistakesNotebook : [])) {
++      const number=m.wordId?.match(/^u([1-4])-/)?.[1];
++      const id=m.questionId || (number ? `unit${number}-v-${m.wordId}` : null);
++      if(id&&!history.questions[id]) history.questions[id]={seenCount:1,attempts:1,incorrectCount:1,correctCount:0,lastSeen:0,lastAttempt:0,lastCorrect:false,legacyMistake:true};
++    }
++    return history;
++  }catch{return normalizeHistory(memoryHistory);}
++}
++export function saveHistory(history,storage=browserStorage()) {
++  memoryHistory=normalizeHistory(history);
++  try {if(!storage)return false;storage.setItem(HISTORY_KEY,JSON.stringify(history));return true;}catch{return false;}
++}
++export function eligibleQuestions(bank,settings,history) {
++  return uniqueValidQuestions(bank).filter(q=> (!settings.unit||q.unit===settings.unit)
++    && (settings.focus==='mixed'||!settings.focus||q.kind===settings.focus)
++    && (settings.exerciseType==='mixed'||!settings.exerciseType||q.exerciseType===settings.exerciseType)
++    && (settings.difficulty==='mixed'||!settings.difficulty||q.difficulty===settings.difficulty)
++    && (!settings.review||history.questions[q.id]?.lastCorrect===false));
++}
++export function selectQuestions(bank,settings,history=emptyHistory(),rng=Math.random) {
++  const eligible=eligibleQuestions(bank,settings,history);
++  const ranked=shuffle(eligible,rng).map((q,index)=>{
++    const h=history.questions[q.id]||{};
++    const tier=Number(h.attempts||0)===0 ? 0 : h.lastCorrect===false ? 2 : 1;
++    return {q,tier,seen:Number(h.seenCount||0)>0 ? 1 : 0,last:Number(h.lastSeen||0),index};
++  }).sort((a,b)=>a.tier-b.tier||a.seen-b.seen||a.last-b.last||a.index-b.index);
++  const limit=Math.max(0,Math.floor(Number(settings.count)||0));
++  return shuffle(ranked.slice(0,limit).map(x=>({...x.q,options:x.q.options?shuffle(x.q.options,rng):undefined})),rng);
++}
++export function beginSession(bank,settings,storage=browserStorage(),now=Date.now(),rng=Math.random) {
++  const history=loadHistory(storage);
++  const available=eligibleQuestions(bank,settings,history).length;
++  const paper=selectQuestions(bank,settings,history,rng);
++  if(!paper.length)return {paper,available,history,saved:true,session:null};
++  const session={id:globalThis.crypto?.randomUUID?.() || `${now}-${Math.random().toString(36).slice(2)}`,settings:{...settings},questionIds:paper.map(q=>q.id),startedAt:now};
++  for(const q of paper){const old=history.questions[q.id]||{};history.questions[q.id]={...old,seenCount:Number(old.seenCount||0)+1,lastSeen:now};}
++  history.sessions.push(session);
++  return {paper,available,session,history,saved:saveHistory(history,storage)};
++}
++function normalizedAnswer(answer) {
++  return normalizeText(answer).replace(/\b(haven't)\b/g,'have not').replace(/\b(hasn't)\b/g,'has not').replace(/[.!?]+$/g,'').replace(/\s*-\s*/g,'-').trim();
++}
++export function isCorrect(q,answer) {
++  if(q.options)return answer===q.correct;
++  const normalized=normalizedAnswer(answer);
++  return q.acceptedAnswers.some(value=>normalizedAnswer(value)===normalized);
++}
++export function submitSession(session,paper,answers,storage=browserStorage(),now=Date.now()) {
++  const history=loadHistory(storage);const match=history.sessions.find(s=>s.id===session.id);
++  if(match?.submittedAt)return {alreadySubmitted:true,history,saved:true,score:match.score};
++  const score=paper.filter(q=>isCorrect(q,answers[q.id])).length;
++  for(const q of paper){const old=history.questions[q.id]||{};const correct=isCorrect(q,answers[q.id]);history.questions[q.id]={...old,attempts:Number(old.attempts||0)+1,correctCount:Number(old.correctCount||0)+(correct?1:0),incorrectCount:Number(old.incorrectCount||0)+(correct?0:1),lastAttempt:now,lastAnswer:answers[q.id],lastCorrect:correct};}
++  if(match)Object.assign(match,{submittedAt:now,score});else history.sessions.push({...session,submittedAt:now,score});
++  return {alreadySubmitted:false,score,history,saved:saveHistory(history,storage)};
++}
++export function applyQuizResult(progress,paper,answers,now=Date.now()) {
++  const mistakes=[...(progress.mistakesNotebook||[])];
++  for(const q of paper) {
++    const index=mistakes.findIndex(m=>m.questionId===q.id);
++    if(isCorrect(q,answers[q.id])) {if(index>=0)mistakes.splice(index,1);continue;}
++    const item={id:`question:${q.id}`,questionId:q.id,...(q.wordId?{wordId:q.wordId}:{}),word:q.prompt,vietnamese:q.topic,type:q.exerciseType,userAnswer:answers[q.id],correctAnswer:q.correct,explanation:q.explanation,sourceRef:q.sourceRef,date:new Date(now).toLocaleDateString('vi-VN')};
++    if(index>=0)mistakes[index]={...mistakes[index],...item};else mistakes.push(item);
++  }
++  return {...progress,xp:(Number(progress.xp)||0)+paper.filter(q=>isCorrect(q,answers[q.id])).length*5,mistakesNotebook:mistakes};
++}
+diff --git a/src/unit1-source-bank.json b/src/unit1-source-bank.json
+new file mode 100644
+index 0000000..567aaf8
+--- /dev/null
++++ b/src/unit1-source-bank.json
+@@ -0,0 +1,2262 @@
++[
++  {
++    "id": "u1-doc01-ex1-q011",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "Many of the diseases that can be cured today ____________ likely to cause death in the past.",
++    "content": "Many of the diseases that can be cured today ____________ likely to cause death in the past.",
++    "correct": "were",
++    "correctAnswer": "were",
++    "explanation": "Có “in the past” → quá khứ đơn; chủ ngữ diseases số nhiều → were.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 11,
++      "paragraphs": [
++        28,
++        29
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q11 · P28–P29",
++    "validated": true,
++    "options": [
++      "are",
++      "were",
++      "have been",
++      "will be"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q012",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "I have received treatment for my health problem ____________.",
++    "content": "I have received treatment for my health problem ____________.",
++    "correct": "recently",
++    "correctAnswer": "recently",
++    "explanation": "Recently đứng cuối câu hiện tại hoàn thành. Ago cần khoảng thời gian; since cần mốc bắt đầu.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 12,
++      "paragraphs": [
++        30,
++        31
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q12 · P30–P31",
++    "validated": true,
++    "options": [
++      "just",
++      "ago",
++      "since",
++      "recently"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q016",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "I ate a lot of chips and burgers when I was younger, but I have since ____________ my eating habits.",
++    "content": "I ate a lot of chips and burgers when I was younger, but I have since ____________ my eating habits.",
++    "correct": "changed",
++    "correctAnswer": "changed",
++    "explanation": "Cấu trúc have + V3: have since changed. Không lặp have sau since.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 16,
++      "paragraphs": [
++        39,
++        40
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q16 · P39–P40",
++    "validated": true,
++    "options": [
++      "changing",
++      "changes",
++      "have changed",
++      "changed"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q032",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "She ____________ a healthy routine last year, but this year, she has been making healthier choices every day.",
++    "content": "She ____________ a healthy routine last year, but this year, she has been making healthier choices every day.",
++    "correct": "didn't follow",
++    "correctAnswer": "didn't follow",
++    "explanation": "Last year là giai đoạn quá khứ đã kết thúc → did not + V: didn’t follow.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 32,
++      "paragraphs": [
++        71,
++        72
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q32 · P71–P72",
++    "validated": true,
++    "options": [
++      "doesn’t follow",
++      "has followed",
++      "hasn’t followed",
++      "didn't follow"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q038",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "She has never had a headache this severe ____________, which is why she decided to visit a doctor.",
++    "content": "She has never had a headache this severe ____________, which is why she decided to visit a doctor.",
++    "correct": "before",
++    "correctAnswer": "before",
++    "explanation": "Never ... before = chưa từng ... trước đây; before phù hợp với trải nghiệm đến hiện tại.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 38,
++      "paragraphs": [
++        83,
++        84
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q38 · P83–P84",
++    "validated": true,
++    "options": [
++      "after",
++      "before",
++      "since",
++      "yet"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q108",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "If you're tired all the time, ____________ going to bed earlier each night.",
++    "content": "If you're tired all the time, ____________ going to bed earlier each night.",
++    "correct": "try",
++    "correctAnswer": "try",
++    "explanation": "Try + V-ing đề xuất thử một cách để cải thiện tình trạng mệt mỏi → try going to bed earlier.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 108,
++      "paragraphs": [
++        208,
++        209
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q108 · P208–P209",
++    "validated": true,
++    "options": [
++      "remember",
++      "try",
++      "stop",
++      "have"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q054",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "The doctors have discussed his treatment ____________ hours, but haven’t made a final decision.",
++    "content": "The doctors have discussed his treatment ____________ hours, but haven’t made a final decision.",
++    "correct": "for",
++    "correctAnswer": "for",
++    "explanation": "Hours là khoảng thời gian → for hours; since phải đi với mốc bắt đầu.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 54,
++      "paragraphs": [
++        114,
++        115
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q54 · P114–P115",
++    "validated": true,
++    "options": [
++      "for",
++      "in",
++      "since",
++      "ago"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q058",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "Life expectancy ____________ greatly over the past 200 years.",
++    "content": "Life expectancy ____________ greatly over the past 200 years.",
++    "correct": "has increased",
++    "correctAnswer": "has increased",
++    "explanation": "Over the past 200 years kéo dài đến hiện tại → has increased; life expectancy số ít.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 58,
++      "paragraphs": [
++        120,
++        121
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q58 · P120–P121",
++    "validated": true,
++    "options": [
++      "will increase",
++      "increases",
++      "increased",
++      "has increased"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q061",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "How long ____________ a headache? I think you should see a doctor.",
++    "content": "How long ____________ a headache? I think you should see a doctor.",
++    "correct": "have you had",
++    "correctAnswer": "have you had",
++    "explanation": "How long hỏi độ dài trạng thái đau đầu còn liên quan hiện tại → have you had.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 61,
++      "paragraphs": [
++        125,
++        126
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q61 · P125–P126",
++    "validated": true,
++    "options": [
++      "have you had",
++      "did you have",
++      "will you have",
++      "do you have"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q064",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "Emma ____________ down on fast food significantly over the past few months because she has wanted to adopt a healthier lifestyle.",
++    "content": "Emma ____________ down on fast food significantly over the past few months because she has wanted to adopt a healthier lifestyle.",
++    "correct": "has cut",
++    "correctAnswer": "has cut",
++    "explanation": "Over the past few months liên hệ khoảng thời gian đến hiện tại → has cut.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 64,
++      "paragraphs": [
++        129,
++        130
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q64 · P129–P130",
++    "validated": true,
++    "options": [
++      "was cutting",
++      "has cut",
++      "cut",
++      "had cut"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q074",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "I started eating more vegetables last week, but I ____________ down on sugary drinks yet.",
++    "content": "I started eating more vegetables last week, but I ____________ down on sugary drinks yet.",
++    "correct": "haven’t cut",
++    "correctAnswer": "haven’t cut",
++    "explanation": "Yet trong câu phủ định, ý chưa cắt giảm đến nay → haven’t cut.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 74,
++      "paragraphs": [
++        145,
++        146
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q74 · P145–P146",
++    "validated": true,
++    "options": [
++      "haven’t cut",
++      "have cut",
++      "didn’t cut",
++      "was cutting"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q076",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "She ____________ out every day this week, but she ____________ a session yesterday because of a headache.",
++    "content": "She ____________ out every day this week, but she ____________ a session yesterday because of a headache.",
++    "correct": "has worked – missed",
++    "correctAnswer": "has worked – missed",
++    "explanation": "Every day this week là thành tích đến hiện tại → has worked; yesterday → missed.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 76,
++      "paragraphs": [
++        148,
++        150
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q76 · P148–P150",
++    "validated": true,
++    "options": [
++      "has worked – has missed",
++      "has worked – missed",
++      "worked – missed",
++      "worked – has missed"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q081",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "My father ____________ late at work last month. He felt exhausted.",
++    "content": "My father ____________ late at work last month. He felt exhausted.",
++    "correct": "stayed",
++    "correctAnswer": "stayed",
++    "explanation": "Last month đã kết thúc → quá khứ đơn stayed; stay là nguyên mẫu nên không phù hợp.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 81,
++      "paragraphs": [
++        158,
++        159
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q81 · P158–P159",
++    "validated": true,
++    "options": [
++      "stay",
++      "stayed",
++      "has stayed",
++      "will stay"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q094",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "So far, scientists ____________ many ways to help people live longer.",
++    "content": "So far, scientists ____________ many ways to help people live longer.",
++    "correct": "have discovered",
++    "correctAnswer": "have discovered",
++    "explanation": "So far = tính đến nay → have discovered; scientists số nhiều đi với have.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 94,
++      "paragraphs": [
++        180,
++        181
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q94 · P180–P181",
++    "validated": true,
++    "options": [
++      "discovered",
++      "had discovered",
++      "discover",
++      "have discovered"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q095",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "She ____________ sugary snacks for over two years to keep her weight stable.",
++    "content": "She ____________ sugary snacks for over two years to keep her weight stable.",
++    "correct": "has avoided",
++    "correctAnswer": "has avoided",
++    "explanation": "For over two years diễn tả việc duy trì đến nay → has avoided.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 95,
++      "paragraphs": [
++        182,
++        183
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q95 · P182–P183",
++    "validated": true,
++    "options": [
++      "avoids",
++      "has avoided",
++      "was avoiding",
++      "avoided"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q097",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "Up to now, many scientists ____________ about the benefits of drinking enough water.",
++    "content": "Up to now, many scientists ____________ about the benefits of drinking enough water.",
++    "correct": "have written",
++    "correctAnswer": "have written",
++    "explanation": "Up to now = cho đến hiện tại → have written; written là V3 của write.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 97,
++      "paragraphs": [
++        186,
++        187
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q97 · P186–P187",
++    "validated": true,
++    "options": [
++      "have written",
++      "wrote",
++      "write",
++      "written"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q098",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "Have your grandparents ____________ any healthy diets to live longer?",
++    "content": "Have your grandparents ____________ any healthy diets to live longer?",
++    "correct": "followed",
++    "correctAnswer": "followed",
++    "explanation": "Have + chủ ngữ + V3 trong câu hỏi hiện tại hoàn thành → followed.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 98,
++      "paragraphs": [
++        188,
++        189
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q98 · P188–P189",
++    "validated": true,
++    "options": [
++      "have followed",
++      "following",
++      "follow",
++      "followed"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q099",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "I ____________ doing yoga to reduce stress and improve my breathing.",
++    "content": "I ____________ doing yoga to reduce stress and improve my breathing.",
++    "correct": "have just started",
++    "correctAnswer": "have just started",
++    "explanation": "Vị trí just thường nằm giữa have/has và V3 → have just started.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 99,
++      "paragraphs": [
++        190,
++        191
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q99 · P190–P191",
++    "validated": true,
++    "options": [
++      "started just",
++      "have just started",
++      "just have started",
++      "have started just"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q100",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "Huy ____________ up jogging three times, but the first time he ____________ it was in 2015.",
++    "content": "Huy ____________ up jogging three times, but the first time he ____________ it was in 2015.",
++    "correct": "has taken – tried",
++    "correctAnswer": "has taken – tried",
++    "explanation": "Three times là trải nghiệm đến nay → has taken; in 2015 là quá khứ xác định → tried.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 100,
++      "paragraphs": [
++        192,
++        193
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q100 · P192–P193",
++    "validated": true,
++    "options": [
++      "has been – had tried",
++      "has taken – tried",
++      "took – has tried",
++      "takes – tries"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q101",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "You should stop ____________ fast food if you want to lose weight.",
++    "content": "You should stop ____________ fast food if you want to lose weight.",
++    "correct": "eating",
++    "correctAnswer": "eating",
++    "explanation": "Stop eating = ngừng ăn. Stop to eat = dừng việc khác để ăn, trái mục đích giảm cân trong câu.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 101,
++      "paragraphs": [
++        194,
++        195
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q101 · P194–P195",
++    "validated": true,
++    "options": [
++      "to eating",
++      "eating",
++      "eat",
++      "to eat"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q103",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "Students ____________ up late at night often feel tired and stressed the next day.",
++    "content": "Students ____________ up late at night often feel tired and stressed the next day.",
++    "correct": "staying",
++    "correctAnswer": "staying",
++    "explanation": "Students staying up late = students who stay up late. Rút gọn mệnh đề quan hệ chủ động bằng V-ing.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 103,
++      "paragraphs": [
++        198,
++        199
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q103 · P198–P199",
++    "validated": true,
++    "options": [
++      "who stays",
++      "staying",
++      "stayed",
++      "stay"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q104",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "We learned useful health tips ____________ the school nurse during our weekly class meeting.",
++    "content": "We learned useful health tips ____________ the school nurse during our weekly class meeting.",
++    "correct": "from",
++    "correctAnswer": "from",
++    "explanation": "Cấu trúc learn something from somebody = học điều gì từ ai → from.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 104,
++      "paragraphs": [
++        200,
++        201
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q104 · P200–P201",
++    "validated": true,
++    "options": [
++      "by",
++      "of",
++      "from",
++      "on"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q107",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "Teenagers should ____________ more time doing exercise instead of playing online games.",
++    "content": "Teenagers should ____________ more time doing exercise instead of playing online games.",
++    "correct": "spend",
++    "correctAnswer": "spend",
++    "explanation": "Spend time doing something = dành thời gian làm gì → spend.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 107,
++      "paragraphs": [
++        206,
++        207
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q107 · P206–P207",
++    "validated": true,
++    "options": [
++      "take",
++      "use",
++      "waste",
++      "spend"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q109",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "Many doctors advise patients to avoid ____________ to protect their lungs.",
++    "content": "Many doctors advise patients to avoid ____________ to protect their lungs.",
++    "correct": "smoking",
++    "correctAnswer": "smoking",
++    "explanation": "Sau avoid dùng V-ing → avoid smoking, không dùng to smoking hay nguyên mẫu.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 109,
++      "paragraphs": [
++        210,
++        211
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q109 · P210–P211",
++    "validated": true,
++    "options": [
++      "smoke",
++      "to smoking",
++      "smoking",
++      "smoked"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q111",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "I remember ____________ to the hospital for a health check when I was ten.",
++    "content": "I remember ____________ to the hospital for a health check when I was ten.",
++    "correct": "going",
++    "correctAnswer": "going",
++    "explanation": "Remember + V-ing chỉ nhớ việc đã làm. “When I was ten” cho thấy đây là ký ức quá khứ → going.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 111,
++      "paragraphs": [
++        214,
++        215
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q111 · P214–P215",
++    "validated": true,
++    "options": [
++      "to go",
++      "going",
++      "went",
++      "go"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q114",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "To begin with, you need ____________ a daily routine that includes physical activities.",
++    "content": "To begin with, you need ____________ a daily routine that includes physical activities.",
++    "correct": "to plan",
++    "correctAnswer": "to plan",
++    "explanation": "Need + to-V khi chủ ngữ cần thực hiện việc gì → need to plan.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 114,
++      "paragraphs": [
++        220,
++        221
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q114 · P220–P221",
++    "validated": true,
++    "options": [
++      "plan",
++      "to plan",
++      "planed",
++      "planning"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q121",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "How about ____________ some yoga to relieve stress and relax your body?",
++    "content": "How about ____________ some yoga to relieve stress and relax your body?",
++    "correct": "doing",
++    "correctAnswer": "doing",
++    "explanation": "Đề xuất bằng How about + V-ing? → How about doing some yoga?",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 121,
++      "paragraphs": [
++        234,
++        235
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q121 · P234–P235",
++    "validated": true,
++    "options": [
++      "doing",
++      "to do",
++      "do",
++      "to doing"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q122",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "Don’t ____________ to stretch your body before starting a heavy workout.",
++    "content": "Don’t ____________ to stretch your body before starting a heavy workout.",
++    "correct": "forget",
++    "correctAnswer": "forget",
++    "explanation": "Sau trợ động từ don’t dùng động từ nguyên mẫu → don’t forget.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 122,
++      "paragraphs": [
++        236,
++        237
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q122 · P236–P237",
++    "validated": true,
++    "options": [
++      "forgotten",
++      "forgetting",
++      "forgot",
++      "forget"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q123",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect and verb patterns",
++    "kind": "grammar",
++    "exerciseType": "verb-forms",
++    "difficulty": "medium",
++    "prompt": "We are pleased ____________ any campaign that promotes a healthy lifestyle.",
++    "content": "We are pleased ____________ any campaign that promotes a healthy lifestyle.",
++    "correct": "to support",
++    "correctAnswer": "to support",
++    "explanation": "Cấu trúc be pleased + to-V = vui khi làm điều gì → pleased to support.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 123,
++      "paragraphs": [
++        238,
++        239
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q123 · P238–P239",
++    "validated": true,
++    "options": [
++      "support",
++      "supporting",
++      "to support",
++      "supported"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q001",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "Although Huy’s over 80, Huy’s still full ____________ energy and walks every day.",
++    "content": "Although Huy’s over 80, Huy’s still full ____________ energy and walks every day.",
++    "correct": "of",
++    "correctAnswer": "of",
++    "explanation": "Cụm full of energy = tràn đầy năng lượng → giới từ of.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 1,
++      "paragraphs": [
++        7,
++        8
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q1 · P7–P8",
++    "validated": true,
++    "options": [
++      "about",
++      "with",
++      "of",
++      "on"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q002",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "word-formation",
++    "difficulty": "easy",
++    "prompt": "You should eat a ____________ diet if you want to stay healthy and avoid illness.",
++    "content": "You should eat a ____________ diet if you want to stay healthy and avoid illness.",
++    "correct": "balanced",
++    "correctAnswer": "balanced",
++    "explanation": "Trước danh từ diet cần tính từ balanced = cân bằng → a balanced diet.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 2,
++      "paragraphs": [
++        9,
++        10
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q2 · P9–P10",
++    "validated": true,
++    "options": [
++      "balanced",
++      "balance",
++      "to balance",
++      "balancing"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q005",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "word-formation",
++    "difficulty": "easy",
++    "prompt": "Anna exercises every day, so she looks ____________ and healthy.",
++    "content": "Anna exercises every day, so she looks ____________ and healthy.",
++    "correct": "fit",
++    "correctAnswer": "fit",
++    "explanation": "Fit là tính từ “khỏe mạnh, cân đối”, phù hợp sau looks và song song với healthy.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 5,
++      "paragraphs": [
++        15,
++        16
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q5 · P15–P16",
++    "validated": true,
++    "options": [
++      "muscle",
++      "fit",
++      "strength",
++      "energy"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q010",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "word-formation",
++    "difficulty": "easy",
++    "prompt": "Watching TV all day is an ____________ habit for children.",
++    "content": "Watching TV all day is an ____________ habit for children.",
++    "correct": "unhealthy",
++    "correctAnswer": "unhealthy",
++    "explanation": "Unhealthy là tính từ chỉ thói quen không lành mạnh; xem TV cả ngày là an unhealthy habit.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 10,
++      "paragraphs": [
++        26,
++        27
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q10 · P26–P27",
++    "validated": true,
++    "options": [
++      "heal",
++      "health",
++      "healthful",
++      "unhealthy"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q014",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "That ____________ looks delicious, but it has too many calories for one meal, said Emma.",
++    "content": "That ____________ looks delicious, but it has too many calories for one meal, said Emma.",
++    "correct": "burger",
++    "correctAnswer": "burger",
++    "explanation": "Burger là đồ ăn có thể có nhiều calories trong một khẩu phần; label và ingredient không phải món ăn hoàn chỉnh.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 14,
++      "paragraphs": [
++        35,
++        36
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q14 · P35–P36",
++    "validated": true,
++    "options": [
++      "label",
++      "banana",
++      "ingredient",
++      "burger"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q017",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "word-formation",
++    "difficulty": "easy",
++    "prompt": "The teacher prepared a fun group ____________ to help Brian practice speaking English",
++    "content": "The teacher prepared a fun group ____________ to help Brian practice speaking English",
++    "correct": "activity",
++    "correctAnswer": "activity",
++    "explanation": "Sau a fun group cần danh từ activity = hoạt động; active là tính từ, actively là trạng từ.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 17,
++      "paragraphs": [
++        41,
++        42
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q17 · P41–P42",
++    "validated": true,
++    "options": [
++      "activity",
++      "active",
++      "actively",
++      "activation"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q022",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "We studied hard for the final ____________ because it was very important.",
++    "content": "We studied hard for the final ____________ because it was very important.",
++    "correct": "examination",
++    "correctAnswer": "examination",
++    "explanation": "Final examination = kỳ thi cuối kỳ; studied hard phù hợp với examination.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 22,
++      "paragraphs": [
++        50,
++        51
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q22 · P50–P51",
++    "validated": true,
++    "options": [
++      "choice",
++      "appointment",
++      "examination",
++      "preparation"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q023",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "If your ____________ continues, you should see a doctor and rest more.",
++    "content": "If your ____________ continues, you should see a doctor and rest more.",
++    "correct": "headache",
++    "correctAnswer": "headache",
++    "explanation": "Headache là cơn đau có thể tiếp diễn; back, leg, stomach chỉ bộ phận cơ thể.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 23,
++      "paragraphs": [
++        52,
++        53
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q23 · P52–P53",
++    "validated": true,
++    "options": [
++      "back",
++      "leg",
++      "stomach",
++      "headache"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q025",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "Mom: Can you check the ____________ on this bottle? Son: Sure! It says “organic and sugar – free.”",
++    "content": "Mom: Can you check the ____________ on this bottle? Son: Sure! It says “organic and sugar – free.”",
++    "correct": "label",
++    "correctAnswer": "label",
++    "explanation": "Nhãn trên chai ghi thông tin organic và sugar-free → label.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 25,
++      "paragraphs": [
++        56,
++        58
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q25 · P56–P58",
++    "validated": true,
++    "options": [
++      "recipe",
++      "sign",
++      "label",
++      "logo"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q026",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "Flour, eggs, and sugar are the main ____________ used to make this delicious cake.",
++    "content": "Flour, eggs, and sugar are the main ____________ used to make this delicious cake.",
++    "correct": "ingredients",
++    "correctAnswer": "ingredients",
++    "explanation": "Flour, eggs, sugar là các nguyên liệu nấu ăn → ingredients.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 26,
++      "paragraphs": [
++        59,
++        60
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q26 · P59–P60",
++    "validated": true,
++    "options": [
++      "elements",
++      "items",
++      "ingredients",
++      "materials"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q027",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "Fruits and vegetables are rich in vitamins and ____________ that help your body stay strong.",
++    "content": "Fruits and vegetables are rich in vitamins and ____________ that help your body stay strong.",
++    "correct": "minerals",
++    "correctAnswer": "minerals",
++    "explanation": "Cụm vitamins and minerals = vitamin và khoáng chất.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 27,
++      "paragraphs": [
++        61,
++        62
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q27 · P61–P62",
++    "validated": true,
++    "options": [
++      "minerals",
++      "flavors",
++      "fats",
++      "chemicals"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q028",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "The article is ____________ useful tips for living a long and healthy life.",
++    "content": "The article is ____________ useful tips for living a long and healthy life.",
++    "correct": "full of",
++    "correctAnswer": "full of",
++    "explanation": "Full of useful tips = chứa nhiều mẹo hữu ích. Các cụm còn lại không diễn tả nội dung bài viết.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 28,
++      "paragraphs": [
++        63,
++        64
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q28 · P63–P64",
++    "validated": true,
++    "options": [
++      "full of",
++      "away from",
++      "up to",
++      "proud of"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q030",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "Julia follows a morning ____________ that includes stretching, journaling, and a healthy breakfast.",
++    "content": "Julia follows a morning ____________ that includes stretching, journaling, and a healthy breakfast.",
++    "correct": "routine",
++    "correctAnswer": "routine",
++    "explanation": "Morning routine = nếp sinh hoạt buổi sáng, gồm nhiều hoạt động lặp lại.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 30,
++      "paragraphs": [
++        67,
++        68
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q30 · P67–P68",
++    "validated": true,
++    "options": [
++      "activity",
++      "repetition",
++      "routine",
++      "option"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q037",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "You shouldn’t ____________ the same mistakes in your diet if you want to stay fit.",
++    "content": "You shouldn’t ____________ the same mistakes in your diet if you want to stay fit.",
++    "correct": "repeat",
++    "correctAnswer": "repeat",
++    "explanation": "Repeat the same mistakes = lặp lại cùng những lỗi sai → repeat.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 37,
++      "paragraphs": [
++        81,
++        82
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q37 · P81–P82",
++    "validated": true,
++    "options": [
++      "cook",
++      "eat",
++      "repeat",
++      "plan"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q045",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "Bacteria are tiny ____________ that can live in your mouth or inside your body.",
++    "content": "Bacteria are tiny ____________ that can live in your mouth or inside your body.",
++    "correct": "organisms",
++    "correctAnswer": "organisms",
++    "explanation": "Organisms = các sinh vật; bacteria là sinh vật rất nhỏ, không phải khoáng chất, nhãn hay công thức.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 45,
++      "paragraphs": [
++        99,
++        99
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q45 · P99–P99",
++    "validated": true,
++    "options": [
++      "minerals",
++      "labels",
++      "recipes",
++      "organisms"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q047",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "A healthy lung has airways with a larger ____________, which helps with breathing.",
++    "content": "A healthy lung has airways with a larger ____________, which helps with breathing.",
++    "correct": "diameter",
++    "correctAnswer": "diameter",
++    "explanation": "Diameter = đường kính; larger diameter mô tả bề rộng đường dẫn khí.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 47,
++      "paragraphs": [
++        103,
++        104
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q47 · P103–P104",
++    "validated": true,
++    "options": [
++      "lifestyle",
++      "pressure",
++      "diameter",
++      "length"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q050",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "____________ is a serious lung disease that needs long treatment with medicine.",
++    "content": "____________ is a serious lung disease that needs long treatment with medicine.",
++    "correct": "Tuberculosis",
++    "correctAnswer": "Tuberculosis",
++    "explanation": "Trong ngữ cảnh bài học, tuberculosis là tên bệnh lao; các lựa chọn còn lại không phải tên bệnh phổi này.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 50,
++      "paragraphs": [
++        108,
++        108
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q50 · P108–P108",
++    "validated": true,
++    "options": [
++      "Fitness",
++      "Tuberculosis",
++      "Stomach",
++      "Headache"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q053",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "You can’t see ____________, but they are everywhere—in the air, water, and food.",
++    "content": "You can’t see ____________, but they are everywhere—in the air, water, and food.",
++    "correct": "germs",
++    "correctAnswer": "germs",
++    "explanation": "Germs = vi trùng rất nhỏ, không nhìn thấy bằng mắt thường trong ngữ cảnh này.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 53,
++      "paragraphs": [
++        113,
++        113
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q53 · P113–P113",
++    "validated": true,
++    "options": [
++      "ingredients",
++      "germs",
++      "minerals",
++      "squats"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q055",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "gap-filling",
++    "difficulty": "easy",
++    "prompt": "She stayed in bed because she felt ____________ and couldn’t go to work.",
++    "content": "She stayed in bed because she felt ____________ and couldn’t go to work.",
++    "correct": "ill",
++    "correctAnswer": "ill",
++    "explanation": "Felt ill = cảm thấy ốm; ngữ cảnh ở nhà, không đi làm được cần tính từ ill.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 55,
++      "paragraphs": [
++        116,
++        116
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q55 · P116–P116",
++    "validated": true,
++    "options": [
++      "repetitive",
++      "strong",
++      "ill",
++      "active"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex1-q056",
++    "unit": "unit1",
++    "topic": "Healthy life vocabulary",
++    "kind": "vocabulary",
++    "exerciseType": "word-formation",
++    "difficulty": "easy",
++    "prompt": "Stress and lack of sleep can lead to ____________ over time.",
++    "content": "Stress and lack of sleep can lead to ____________ over time.",
++    "correct": "serious illness",
++    "correctAnswer": "serious illness",
++    "explanation": "Cần cụm danh từ sau lead to: tính từ serious đứng trước danh từ illness → serious illness.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 1",
++      "question": 56,
++      "paragraphs": [
++        117,
++        117
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 1 · Q56 · P117–P117",
++    "validated": true,
++    "options": [
++      "serious ill",
++      "serious illness",
++      "ill serious",
++      "illness serious"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex2-q01",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect transformations",
++    "kind": "grammar",
++    "exerciseType": "sentence-transformation",
++    "difficulty": "hard",
++    "prompt": "I haven’t eaten junk food for two weeks. The last time ...",
++    "content": "I haven’t eaten junk food for two weeks. The last time ...",
++    "correct": "The last time I ate junk food was two weeks ago.",
++    "correctAnswer": "The last time I ate junk food was two weeks ago.",
++    "explanation": "Hiện tại hoàn thành phủ định + for two weeks → The last time + quá khứ đơn + was two weeks ago.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 2",
++      "question": 1,
++      "paragraphs": [
++        241,
++        244
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 2 · Q1 · P241–P244",
++    "validated": true,
++    "acceptedAnswers": [
++      "The last time I ate junk food was two weeks ago."
++    ]
++  },
++  {
++    "id": "u1-doc01-ex2-q03",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect transformations",
++    "kind": "grammar",
++    "exerciseType": "sentence-transformation",
++    "difficulty": "hard",
++    "prompt": "It has been six years since my father last went jogging. The last time ...",
++    "content": "It has been six years since my father last went jogging. The last time ...",
++    "correct": "The last time my father went jogging was six years ago.",
++    "correctAnswer": "The last time my father went jogging was six years ago.",
++    "explanation": "It has been + khoảng thời gian + since ... last ... → The last time ... was + khoảng thời gian + ago.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 2",
++      "question": 3,
++      "paragraphs": [
++        248,
++        249
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 2 · Q3 · P248–P249",
++    "validated": true,
++    "acceptedAnswers": [
++      "The last time my father went jogging was six years ago."
++    ]
++  },
++  {
++    "id": "u1-doc01-ex2-q04",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect transformations",
++    "kind": "grammar",
++    "exerciseType": "sentence-transformation",
++    "difficulty": "hard",
++    "prompt": "She started practicing yoga when she was 30. Rewrite using “since”.",
++    "content": "She started practicing yoga when she was 30. Rewrite using “since”.",
++    "correct": "She has practiced yoga since she was 30.",
++    "correctAnswer": "She has practiced yoga since she was 30.",
++    "explanation": "Hoạt động bắt đầu ở mốc “when she was 30” và tiếp diễn → hiện tại hoàn thành + since. Chấp nhận dạng hoàn thành tiếp diễn phù hợp.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 2",
++      "question": 4,
++      "paragraphs": [
++        250,
++        251
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 2 · Q4 · P250–P251",
++    "validated": true,
++    "acceptedAnswers": [
++      "She has practiced yoga since she was 30.",
++      "She has practised yoga since she was 30.",
++      "She has been practicing yoga since she was 30.",
++      "She has been practising yoga since she was 30."
++    ]
++  },
++  {
++    "id": "u1-doc01-ex2-q07",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect transformations",
++    "kind": "grammar",
++    "exerciseType": "sentence-transformation",
++    "difficulty": "hard",
++    "prompt": "This is the first time I have tried doing morning exercises. Rewrite using “before”.",
++    "content": "This is the first time I have tried doing morning exercises. Rewrite using “before”.",
++    "correct": "I have never tried doing morning exercises before.",
++    "correctAnswer": "I have never tried doing morning exercises before.",
++    "explanation": "This is the first time + hiện tại hoàn thành → chưa từng làm việc ấy trước đây: have never / have not ... before.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 2",
++      "question": 7,
++      "paragraphs": [
++        258,
++        259
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 2 · Q7 · P258–P259",
++    "validated": true,
++    "acceptedAnswers": [
++      "I have never tried doing morning exercises before.",
++      "I have not tried doing morning exercises before.",
++      "I haven’t tried doing morning exercises before."
++    ]
++  },
++  {
++    "id": "u1-doc01-ex2-q14",
++    "unit": "unit1",
++    "topic": "Past simple / present perfect transformations",
++    "kind": "grammar",
++    "exerciseType": "sentence-transformation",
++    "difficulty": "hard",
++    "prompt": "When was the last time he took a break from social media? Rewrite using “last”.",
++    "content": "When was the last time he took a break from social media? Rewrite using “last”.",
++    "correct": "When did he last take a break from social media?",
++    "correctAnswer": "When did he last take a break from social media?",
++    "explanation": "When was the last time + S + V2? → When did + S + last + V nguyên mẫu?",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 2",
++      "question": 14,
++      "paragraphs": [
++        277,
++        278
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 2 · Q14 · P277–P278",
++    "validated": true,
++    "acceptedAnswers": [
++      "When did he last take a break from social media?"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex4-q01",
++    "unit": "unit1",
++    "topic": "Healthy eating leaflet",
++    "kind": "exam",
++    "exerciseType": "cloze-test",
++    "difficulty": "medium",
++    "prompt": "Choose the best answer for blank (1) in the leaflet.",
++    "content": "Choose the best answer for blank (1) in the leaflet.",
++    "correct": "As a result",
++    "correctAnswer": "As a result",
++    "explanation": "As a result nối nguyên nhân bận rộn với hệ quả chọn đồ ăn nhanh.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 4",
++      "question": 1,
++      "paragraphs": [
++        294,
++        304
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 4 · Q1 · P294–P304",
++    "validated": true,
++    "passageId": "u1-doc01-ex4",
++    "passage": "One of the main reasons our diets are unhealthy is the lack of time. With busy schedules and fast – paced lifestyles, people often turn to fast food or pre – packaged meals that are high in calories, sugar, and unhealthy fats. (1) ____________, these quick and convenient options become the default choice which leads to poor nutrition. Another factor contributing to unhealthy eating habits is the rise of mukbang videos, where hosts consume huge (2) ____________ of food in a single sitting. These videos can influence viewers to normalize overeating or to mimic similar eating (3) ____________, ultimately leading to poor food choices and health risks.\n\nTips for Healthy Eating\n\nTake some time each week to prepare a meal plan. Having healthy options readily (4) ____________ can help you avoid impulsive, unhealthy food choices when you’re busy.\n\nInstead of watching mukbang videos, try following cooking channels that share (5) ____________ for healthy and delicious meals. These can inspire you to cook at home and make better food choices.\n\nTry to (6) ____________ on your intake of processed snacks and sugary drinks. Instead, opt for fresh fruits, vegetables, and whole grains that provide better nutrition and keep you energized throughout the day.",
++    "passageTitle": "Healthy Eating: A Guide to Better Living Let’s make healthier choices every day!",
++    "options": [
++      "In contrast",
++      "For example",
++      "As a result",
++      "In addition"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex4-q02",
++    "unit": "unit1",
++    "topic": "Healthy eating leaflet",
++    "kind": "exam",
++    "exerciseType": "cloze-test",
++    "difficulty": "medium",
++    "prompt": "Choose the best answer for blank (2) in the leaflet.",
++    "content": "Choose the best answer for blank (2) in the leaflet.",
++    "correct": "amounts",
++    "correctAnswer": "amounts",
++    "explanation": "Food là danh từ không đếm được → huge amounts of food, không dùng numbers.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 4",
++      "question": 2,
++      "paragraphs": [
++        294,
++        304
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 4 · Q2 · P294–P304",
++    "validated": true,
++    "passageId": "u1-doc01-ex4",
++    "passage": "One of the main reasons our diets are unhealthy is the lack of time. With busy schedules and fast – paced lifestyles, people often turn to fast food or pre – packaged meals that are high in calories, sugar, and unhealthy fats. (1) ____________, these quick and convenient options become the default choice which leads to poor nutrition. Another factor contributing to unhealthy eating habits is the rise of mukbang videos, where hosts consume huge (2) ____________ of food in a single sitting. These videos can influence viewers to normalize overeating or to mimic similar eating (3) ____________, ultimately leading to poor food choices and health risks.\n\nTips for Healthy Eating\n\nTake some time each week to prepare a meal plan. Having healthy options readily (4) ____________ can help you avoid impulsive, unhealthy food choices when you’re busy.\n\nInstead of watching mukbang videos, try following cooking channels that share (5) ____________ for healthy and delicious meals. These can inspire you to cook at home and make better food choices.\n\nTry to (6) ____________ on your intake of processed snacks and sugary drinks. Instead, opt for fresh fruits, vegetables, and whole grains that provide better nutrition and keep you energized throughout the day.",
++    "passageTitle": "Healthy Eating: A Guide to Better Living Let’s make healthier choices every day!",
++    "options": [
++      "amounts",
++      "numbers",
++      "levels",
++      "qualities"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex4-q03",
++    "unit": "unit1",
++    "topic": "Healthy eating leaflet",
++    "kind": "exam",
++    "exerciseType": "cloze-test",
++    "difficulty": "medium",
++    "prompt": "Choose the best answer for blank (3) in the leaflet.",
++    "content": "Choose the best answer for blank (3) in the leaflet.",
++    "correct": "behaviors",
++    "correctAnswer": "behaviors",
++    "explanation": "Eating behaviors = hành vi ăn uống; ngữ cảnh bắt chước cách ăn trong video.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 4",
++      "question": 3,
++      "paragraphs": [
++        294,
++        304
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 4 · Q3 · P294–P304",
++    "validated": true,
++    "passageId": "u1-doc01-ex4",
++    "passage": "One of the main reasons our diets are unhealthy is the lack of time. With busy schedules and fast – paced lifestyles, people often turn to fast food or pre – packaged meals that are high in calories, sugar, and unhealthy fats. (1) ____________, these quick and convenient options become the default choice which leads to poor nutrition. Another factor contributing to unhealthy eating habits is the rise of mukbang videos, where hosts consume huge (2) ____________ of food in a single sitting. These videos can influence viewers to normalize overeating or to mimic similar eating (3) ____________, ultimately leading to poor food choices and health risks.\n\nTips for Healthy Eating\n\nTake some time each week to prepare a meal plan. Having healthy options readily (4) ____________ can help you avoid impulsive, unhealthy food choices when you’re busy.\n\nInstead of watching mukbang videos, try following cooking channels that share (5) ____________ for healthy and delicious meals. These can inspire you to cook at home and make better food choices.\n\nTry to (6) ____________ on your intake of processed snacks and sugary drinks. Instead, opt for fresh fruits, vegetables, and whole grains that provide better nutrition and keep you energized throughout the day.",
++    "passageTitle": "Healthy Eating: A Guide to Better Living Let’s make healthier choices every day!",
++    "options": [
++      "proportions",
++      "behaviors",
++      "solutions",
++      "capacities"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex4-q04",
++    "unit": "unit1",
++    "topic": "Healthy eating leaflet",
++    "kind": "exam",
++    "exerciseType": "cloze-test",
++    "difficulty": "medium",
++    "prompt": "Choose the best answer for blank (4) in the leaflet.",
++    "content": "Choose the best answer for blank (4) in the leaflet.",
++    "correct": "available",
++    "correctAnswer": "available",
++    "explanation": "Readily available = sẵn có; chuẩn bị trước giúp tránh lựa chọn vội vàng.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 4",
++      "question": 4,
++      "paragraphs": [
++        294,
++        304
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 4 · Q4 · P294–P304",
++    "validated": true,
++    "passageId": "u1-doc01-ex4",
++    "passage": "One of the main reasons our diets are unhealthy is the lack of time. With busy schedules and fast – paced lifestyles, people often turn to fast food or pre – packaged meals that are high in calories, sugar, and unhealthy fats. (1) ____________, these quick and convenient options become the default choice which leads to poor nutrition. Another factor contributing to unhealthy eating habits is the rise of mukbang videos, where hosts consume huge (2) ____________ of food in a single sitting. These videos can influence viewers to normalize overeating or to mimic similar eating (3) ____________, ultimately leading to poor food choices and health risks.\n\nTips for Healthy Eating\n\nTake some time each week to prepare a meal plan. Having healthy options readily (4) ____________ can help you avoid impulsive, unhealthy food choices when you’re busy.\n\nInstead of watching mukbang videos, try following cooking channels that share (5) ____________ for healthy and delicious meals. These can inspire you to cook at home and make better food choices.\n\nTry to (6) ____________ on your intake of processed snacks and sugary drinks. Instead, opt for fresh fruits, vegetables, and whole grains that provide better nutrition and keep you energized throughout the day.",
++    "passageTitle": "Healthy Eating: A Guide to Better Living Let’s make healthier choices every day!",
++    "options": [
++      "invisible",
++      "acceptable",
++      "convenient",
++      "available"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex4-q05",
++    "unit": "unit1",
++    "topic": "Healthy eating leaflet",
++    "kind": "exam",
++    "exerciseType": "cloze-test",
++    "difficulty": "medium",
++    "prompt": "Choose the best answer for blank (5) in the leaflet.",
++    "content": "Choose the best answer for blank (5) in the leaflet.",
++    "correct": "recipes",
++    "correctAnswer": "recipes",
++    "explanation": "Cooking channels share recipes = các kênh nấu ăn chia sẻ công thức.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 4",
++      "question": 5,
++      "paragraphs": [
++        294,
++        304
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 4 · Q5 · P294–P304",
++    "validated": true,
++    "passageId": "u1-doc01-ex4",
++    "passage": "One of the main reasons our diets are unhealthy is the lack of time. With busy schedules and fast – paced lifestyles, people often turn to fast food or pre – packaged meals that are high in calories, sugar, and unhealthy fats. (1) ____________, these quick and convenient options become the default choice which leads to poor nutrition. Another factor contributing to unhealthy eating habits is the rise of mukbang videos, where hosts consume huge (2) ____________ of food in a single sitting. These videos can influence viewers to normalize overeating or to mimic similar eating (3) ____________, ultimately leading to poor food choices and health risks.\n\nTips for Healthy Eating\n\nTake some time each week to prepare a meal plan. Having healthy options readily (4) ____________ can help you avoid impulsive, unhealthy food choices when you’re busy.\n\nInstead of watching mukbang videos, try following cooking channels that share (5) ____________ for healthy and delicious meals. These can inspire you to cook at home and make better food choices.\n\nTry to (6) ____________ on your intake of processed snacks and sugary drinks. Instead, opt for fresh fruits, vegetables, and whole grains that provide better nutrition and keep you energized throughout the day.",
++    "passageTitle": "Healthy Eating: A Guide to Better Living Let’s make healthier choices every day!",
++    "options": [
++      "ingredients",
++      "components",
++      "recipes",
++      "materials"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex4-q06",
++    "unit": "unit1",
++    "topic": "Healthy eating leaflet",
++    "kind": "exam",
++    "exerciseType": "cloze-test",
++    "difficulty": "medium",
++    "prompt": "Choose the best answer for blank (6) in the leaflet.",
++    "content": "Choose the best answer for blank (6) in the leaflet.",
++    "correct": "cut down",
++    "correctAnswer": "cut down",
++    "explanation": "Cut down on = cắt giảm lượng tiêu thụ; các cụm còn lại không phù hợp với intake.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 4",
++      "question": 6,
++      "paragraphs": [
++        294,
++        304
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 4 · Q6 · P294–P304",
++    "validated": true,
++    "passageId": "u1-doc01-ex4",
++    "passage": "One of the main reasons our diets are unhealthy is the lack of time. With busy schedules and fast – paced lifestyles, people often turn to fast food or pre – packaged meals that are high in calories, sugar, and unhealthy fats. (1) ____________, these quick and convenient options become the default choice which leads to poor nutrition. Another factor contributing to unhealthy eating habits is the rise of mukbang videos, where hosts consume huge (2) ____________ of food in a single sitting. These videos can influence viewers to normalize overeating or to mimic similar eating (3) ____________, ultimately leading to poor food choices and health risks.\n\nTips for Healthy Eating\n\nTake some time each week to prepare a meal plan. Having healthy options readily (4) ____________ can help you avoid impulsive, unhealthy food choices when you’re busy.\n\nInstead of watching mukbang videos, try following cooking channels that share (5) ____________ for healthy and delicious meals. These can inspire you to cook at home and make better food choices.\n\nTry to (6) ____________ on your intake of processed snacks and sugary drinks. Instead, opt for fresh fruits, vegetables, and whole grains that provide better nutrition and keep you energized throughout the day.",
++    "passageTitle": "Healthy Eating: A Guide to Better Living Let’s make healthier choices every day!",
++    "options": [
++      "cut down",
++      "write down",
++      "put down",
++      "die down"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex7-q01",
++    "unit": "unit1",
++    "topic": "Healthy habits conversations",
++    "kind": "exam",
++    "exerciseType": "sentence-arrangement",
++    "difficulty": "medium",
++    "prompt": "Arrange the utterances in a meaningful order (e.g. a-b-c): a. Liam: I brush them twice a day – in the morning and before bed. b. Emma: That’s great! My dentist says brushing for at least two minutes each time really helps. c. Emma: Liam, how often do you brush your teeth?",
++    "content": "Arrange the utterances in a meaningful order (e.g. a-b-c): a. Liam: I brush them twice a day – in the morning and before bed. b. Emma: That’s great! My dentist says brushing for at least two minutes each time really helps. c. Emma: Liam, how often do you brush your teeth?",
++    "correct": "c-a-b",
++    "correctAnswer": "c-a-b",
++    "explanation": "Câu hỏi về tần suất đánh răng → trả lời hai lần mỗi ngày → lời nhận xét của Emma.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 7",
++      "question": 1,
++      "paragraphs": [
++        342,
++        343
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 7 · Q1 · P342–P343",
++    "validated": true,
++    "acceptedAnswers": [
++      "c-a-b"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex7-q02",
++    "unit": "unit1",
++    "topic": "Healthy habits conversations",
++    "kind": "exam",
++    "exerciseType": "sentence-arrangement",
++    "difficulty": "medium",
++    "prompt": "Arrange the utterances in a meaningful order (e.g. a-b-c): a. Ethan: Try cutting down on sugary snacks and soda. They cause cavities. b. Sophie: Ethan, I’m trying to take better care of my teeth. Any advice? c. Sophie: Good idea! I’ll eat more fruits and drink water instead.",
++    "content": "Arrange the utterances in a meaningful order (e.g. a-b-c): a. Ethan: Try cutting down on sugary snacks and soda. They cause cavities. b. Sophie: Ethan, I’m trying to take better care of my teeth. Any advice? c. Sophie: Good idea! I’ll eat more fruits and drink water instead.",
++    "correct": "b-a-c",
++    "correctAnswer": "b-a-c",
++    "explanation": "Sophie xin lời khuyên → Ethan đưa lời khuyên → Sophie đồng ý và nêu hành động.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 7",
++      "question": 2,
++      "paragraphs": [
++        346,
++        346
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 7 · Q2 · P346–P346",
++    "validated": true,
++    "acceptedAnswers": [
++      "b-a-c"
++    ]
++  },
++  {
++    "id": "u1-doc01-ex7-q03",
++    "unit": "unit1",
++    "topic": "Healthy habits conversations",
++    "kind": "exam",
++    "exerciseType": "sentence-arrangement",
++    "difficulty": "medium",
++    "prompt": "Arrange the utterances in a meaningful order (e.g. a-b-c): a. Oliver: I should start doing that too. I always forget! b. Oliver: Mia, do you go to the dentist regularly? c. Mia: Yes, I have a dental check – up every six months. It helps prevent problems.",
++    "content": "Arrange the utterances in a meaningful order (e.g. a-b-c): a. Oliver: I should start doing that too. I always forget! b. Oliver: Mia, do you go to the dentist regularly? c. Mia: Yes, I have a dental check – up every six months. It helps prevent problems.",
++    "correct": "b-c-a",
++    "correctAnswer": "b-c-a",
++    "explanation": "Oliver hỏi về khám răng → Mia trả lời → Oliver nói mình cũng nên làm vậy.",
++    "source": {
++      "filename": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_8295bc4d80b08191a882aafe36d92016",
++      "section": "Exercise 7",
++      "question": 3,
++      "paragraphs": [
++        349,
++        350
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Exercise 7 · Q3 · P349–P350",
++    "validated": true,
++    "acceptedAnswers": [
++      "b-c-a"
++    ]
++  },
++  {
++    "id": "u1-doc02-q33",
++    "unit": "unit1",
++    "topic": "Sleep and study",
++    "kind": "exam",
++    "exerciseType": "reading-comprehension",
++    "difficulty": "medium",
++    "prompt": "The word \"they\" in paragraph 2 refers to ____________.",
++    "content": "The word \"they\" in paragraph 2 refers to ____________.",
++    "correct": "teenagers",
++    "correctAnswer": "teenagers",
++    "explanation": "They nối lại chủ ngữ teenagers trong đoạn 2, trước khi so sánh giờ ngủ với người lớn.",
++    "source": {
++      "filename": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_3c4d0f76a16c81918c32aaec938b2959",
++      "section": "Reading: Making the ZZZs come easy",
++      "question": 33,
++      "paragraphs": [
++        126,
++        127
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Reading: Making the ZZZs come easy · Q33 · P126–P127",
++    "validated": true,
++    "passageId": "u1-doc02-sleep",
++    "passage": "You're sleeping deeply when, suddenly, the alarm goes off. No! You just need five more minutes... Does this sound familiar? Well, you're not alone. Teenagers everywhere complain about a lack of sleep, but why is this?\n\nTo start with, on average, teenagers need to sleep 8 – 10 hours, compared to adults' 7 – 9. They also usually feel sleepy later at night than adults, and take longer to wake up in the morning. That's the reason why they always want to sleep in!\n\n[I] But can this tiredness actually hurt you? Unfortunately, it can. [II] If you don't get enough sleep, you find it harder to concentrate at school and you might do worse in your exams. [III] You're also more likely to become ill or suffer from stress. [IV]\n\nLuckily, there's a simple solution. Get more sleep and sleep better with a good evening routine. Firstly, eat dinner early so you don't go to bed on a full stomach. Then, about an hour before you go to bed, start doing something quiet and relaxing like reading a book. Switch off your screens as the bright light from your smartphone or tablet can wake your body up. Finally, go to bed and get up at the same time every day. This helps your body find the right time for bedtime.\n\nIf you follow these tips to get more sleep, you will boost your performance at school while staying happy and healthy. Remember, there are no dreams without sleep. So, if you want to follow your dreams, make sure you catch up on those ZZZs!",
++    "passageTitle": "MAKING THE ZZZS... COME EASY",
++    "options": [
++      "adults",
++      "sleepy people",
++      "teenagers",
++      "early risers"
++    ]
++  },
++  {
++    "id": "u1-doc02-q34",
++    "unit": "unit1",
++    "topic": "Sleep and study",
++    "kind": "exam",
++    "exerciseType": "reading-comprehension",
++    "difficulty": "medium",
++    "prompt": "Which of the following is NOT mentioned in the passage as a way to improve sleep quality?",
++    "content": "Which of the following is NOT mentioned in the passage as a way to improve sleep quality?",
++    "correct": "Doing homework right before going to bed",
++    "correctAnswer": "Doing homework right before going to bed",
++    "explanation": "Đoạn 4 nói tắt thiết bị, không ngủ khi quá no và giữ lịch ngủ đều; không khuyên làm bài tập ngay trước giờ ngủ.",
++    "source": {
++      "filename": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_3c4d0f76a16c81918c32aaec938b2959",
++      "section": "Reading: Making the ZZZs come easy",
++      "question": 34,
++      "paragraphs": [
++        128,
++        130
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Reading: Making the ZZZs come easy · Q34 · P128–P130",
++    "validated": true,
++    "passageId": "u1-doc02-sleep",
++    "passage": "You're sleeping deeply when, suddenly, the alarm goes off. No! You just need five more minutes... Does this sound familiar? Well, you're not alone. Teenagers everywhere complain about a lack of sleep, but why is this?\n\nTo start with, on average, teenagers need to sleep 8 – 10 hours, compared to adults' 7 – 9. They also usually feel sleepy later at night than adults, and take longer to wake up in the morning. That's the reason why they always want to sleep in!\n\n[I] But can this tiredness actually hurt you? Unfortunately, it can. [II] If you don't get enough sleep, you find it harder to concentrate at school and you might do worse in your exams. [III] You're also more likely to become ill or suffer from stress. [IV]\n\nLuckily, there's a simple solution. Get more sleep and sleep better with a good evening routine. Firstly, eat dinner early so you don't go to bed on a full stomach. Then, about an hour before you go to bed, start doing something quiet and relaxing like reading a book. Switch off your screens as the bright light from your smartphone or tablet can wake your body up. Finally, go to bed and get up at the same time every day. This helps your body find the right time for bedtime.\n\nIf you follow these tips to get more sleep, you will boost your performance at school while staying happy and healthy. Remember, there are no dreams without sleep. So, if you want to follow your dreams, make sure you catch up on those ZZZs!",
++    "passageTitle": "MAKING THE ZZZS... COME EASY",
++    "options": [
++      "Turning off electronic devices before sleeping",
++      "Avoiding going to bed on a full stomach",
++      "Doing homework right before going to bed",
++      "Keeping a regular sleeping schedule"
++    ]
++  },
++  {
++    "id": "u1-doc02-q35",
++    "unit": "unit1",
++    "topic": "Sleep and study",
++    "kind": "exam",
++    "exerciseType": "reading-comprehension",
++    "difficulty": "medium",
++    "prompt": "What is the main idea of paragraph 2?",
++    "content": "What is the main idea of paragraph 2?",
++    "correct": "Teenagers need more sleep than adults and tend to wake up later",
++    "correctAnswer": "Teenagers need more sleep than adults and tend to wake up later",
++    "explanation": "Đoạn 2 so sánh nhu cầu ngủ và xu hướng buồn ngủ, thức dậy muộn của thiếu niên với người lớn.",
++    "source": {
++      "filename": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_3c4d0f76a16c81918c32aaec938b2959",
++      "section": "Reading: Making the ZZZs come easy",
++      "question": 35,
++      "paragraphs": [
++        131,
++        135
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Reading: Making the ZZZs come easy · Q35 · P131–P135",
++    "validated": true,
++    "passageId": "u1-doc02-sleep",
++    "passage": "You're sleeping deeply when, suddenly, the alarm goes off. No! You just need five more minutes... Does this sound familiar? Well, you're not alone. Teenagers everywhere complain about a lack of sleep, but why is this?\n\nTo start with, on average, teenagers need to sleep 8 – 10 hours, compared to adults' 7 – 9. They also usually feel sleepy later at night than adults, and take longer to wake up in the morning. That's the reason why they always want to sleep in!\n\n[I] But can this tiredness actually hurt you? Unfortunately, it can. [II] If you don't get enough sleep, you find it harder to concentrate at school and you might do worse in your exams. [III] You're also more likely to become ill or suffer from stress. [IV]\n\nLuckily, there's a simple solution. Get more sleep and sleep better with a good evening routine. Firstly, eat dinner early so you don't go to bed on a full stomach. Then, about an hour before you go to bed, start doing something quiet and relaxing like reading a book. Switch off your screens as the bright light from your smartphone or tablet can wake your body up. Finally, go to bed and get up at the same time every day. This helps your body find the right time for bedtime.\n\nIf you follow these tips to get more sleep, you will boost your performance at school while staying happy and healthy. Remember, there are no dreams without sleep. So, if you want to follow your dreams, make sure you catch up on those ZZZs!",
++    "passageTitle": "MAKING THE ZZZS... COME EASY",
++    "options": [
++      "Teenagers are naturally lazy and sleep a lot",
++      "Teenagers need more sleep than adults and tend to wake up later",
++      "Adults and teenagers have similar sleep needs",
++      "Adults always wake up early because of work stress"
++    ]
++  },
++  {
++    "id": "u1-doc02-q36",
++    "unit": "unit1",
++    "topic": "Sleep and study",
++    "kind": "exam",
++    "exerciseType": "reading-comprehension",
++    "difficulty": "medium",
++    "prompt": "The word \"boost\" in the last paragraph is OPPOSITE in meaning to ____________.",
++    "content": "The word \"boost\" in the last paragraph is OPPOSITE in meaning to ____________.",
++    "correct": "reduce",
++    "correctAnswer": "reduce",
++    "explanation": "Boost nghĩa là tăng/cải thiện; trái nghĩa trong các lựa chọn là reduce = giảm.",
++    "source": {
++      "filename": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_3c4d0f76a16c81918c32aaec938b2959",
++      "section": "Reading: Making the ZZZs come easy",
++      "question": 36,
++      "paragraphs": [
++        136,
++        137
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Reading: Making the ZZZs come easy · Q36 · P136–P137",
++    "validated": true,
++    "passageId": "u1-doc02-sleep",
++    "passage": "You're sleeping deeply when, suddenly, the alarm goes off. No! You just need five more minutes... Does this sound familiar? Well, you're not alone. Teenagers everywhere complain about a lack of sleep, but why is this?\n\nTo start with, on average, teenagers need to sleep 8 – 10 hours, compared to adults' 7 – 9. They also usually feel sleepy later at night than adults, and take longer to wake up in the morning. That's the reason why they always want to sleep in!\n\n[I] But can this tiredness actually hurt you? Unfortunately, it can. [II] If you don't get enough sleep, you find it harder to concentrate at school and you might do worse in your exams. [III] You're also more likely to become ill or suffer from stress. [IV]\n\nLuckily, there's a simple solution. Get more sleep and sleep better with a good evening routine. Firstly, eat dinner early so you don't go to bed on a full stomach. Then, about an hour before you go to bed, start doing something quiet and relaxing like reading a book. Switch off your screens as the bright light from your smartphone or tablet can wake your body up. Finally, go to bed and get up at the same time every day. This helps your body find the right time for bedtime.\n\nIf you follow these tips to get more sleep, you will boost your performance at school while staying happy and healthy. Remember, there are no dreams without sleep. So, if you want to follow your dreams, make sure you catch up on those ZZZs!",
++    "passageTitle": "MAKING THE ZZZS... COME EASY",
++    "options": [
++      "improve",
++      "increase",
++      "reduce",
++      "support"
++    ]
++  },
++  {
++    "id": "u1-doc02-q37",
++    "unit": "unit1",
++    "topic": "Sleep and study",
++    "kind": "exam",
++    "exerciseType": "reading-comprehension",
++    "difficulty": "medium",
++    "prompt": "Which of the following is TRUE according to the passage?",
++    "content": "Which of the following is TRUE according to the passage?",
++    "correct": "Lack of sleep can affect students’ physical and academic performance",
++    "correctAnswer": "Lack of sleep can affect students’ physical and academic performance",
++    "explanation": "Đoạn 3 nêu khó tập trung, kết quả thi kém hơn, dễ ốm hoặc căng thẳng khi thiếu ngủ.",
++    "source": {
++      "filename": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_3c4d0f76a16c81918c32aaec938b2959",
++      "section": "Reading: Making the ZZZs come easy",
++      "question": 37,
++      "paragraphs": [
++        138,
++        142
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Reading: Making the ZZZs come easy · Q37 · P138–P142",
++    "validated": true,
++    "passageId": "u1-doc02-sleep",
++    "passage": "You're sleeping deeply when, suddenly, the alarm goes off. No! You just need five more minutes... Does this sound familiar? Well, you're not alone. Teenagers everywhere complain about a lack of sleep, but why is this?\n\nTo start with, on average, teenagers need to sleep 8 – 10 hours, compared to adults' 7 – 9. They also usually feel sleepy later at night than adults, and take longer to wake up in the morning. That's the reason why they always want to sleep in!\n\n[I] But can this tiredness actually hurt you? Unfortunately, it can. [II] If you don't get enough sleep, you find it harder to concentrate at school and you might do worse in your exams. [III] You're also more likely to become ill or suffer from stress. [IV]\n\nLuckily, there's a simple solution. Get more sleep and sleep better with a good evening routine. Firstly, eat dinner early so you don't go to bed on a full stomach. Then, about an hour before you go to bed, start doing something quiet and relaxing like reading a book. Switch off your screens as the bright light from your smartphone or tablet can wake your body up. Finally, go to bed and get up at the same time every day. This helps your body find the right time for bedtime.\n\nIf you follow these tips to get more sleep, you will boost your performance at school while staying happy and healthy. Remember, there are no dreams without sleep. So, if you want to follow your dreams, make sure you catch up on those ZZZs!",
++    "passageTitle": "MAKING THE ZZZS... COME EASY",
++    "options": [
++      "Teenagers function better on 6 – 7 hours of sleep than adults",
++      "Lack of sleep can affect students’ physical and academic performance",
++      "Dinner should be eaten right before going to bed to relax the stomach",
++      "Reading on a tablet before bed is a recommended activity"
++    ]
++  },
++  {
++    "id": "u1-doc02-q38",
++    "unit": "unit1",
++    "topic": "Sleep and study",
++    "kind": "exam",
++    "exerciseType": "reading-comprehension",
++    "difficulty": "medium",
++    "prompt": "Which of the following best paraphrases the sentence: \"Switch off your screens as the bright light from your smartphone or tablet can wake your body up.\" in paragraph 4?",
++    "content": "Which of the following best paraphrases the sentence: \"Switch off your screens as the bright light from your smartphone or tablet can wake your body up.\" in paragraph 4?",
++    "correct": "The light from digital devices can keep your body awake, so turn them off before bed.",
++    "correctAnswer": "The light from digital devices can keep your body awake, so turn them off before bed.",
++    "explanation": "Vì ánh sáng thiết bị có thể làm cơ thể tỉnh táo nên tắt màn hình trước ngủ; phương án B giữ đúng quan hệ nguyên nhân.",
++    "source": {
++      "filename": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_3c4d0f76a16c81918c32aaec938b2959",
++      "section": "Reading: Making the ZZZs come easy",
++      "question": 38,
++      "paragraphs": [
++        143,
++        144
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Reading: Making the ZZZs come easy · Q38 · P143–P144",
++    "validated": true,
++    "passageId": "u1-doc02-sleep",
++    "passage": "You're sleeping deeply when, suddenly, the alarm goes off. No! You just need five more minutes... Does this sound familiar? Well, you're not alone. Teenagers everywhere complain about a lack of sleep, but why is this?\n\nTo start with, on average, teenagers need to sleep 8 – 10 hours, compared to adults' 7 – 9. They also usually feel sleepy later at night than adults, and take longer to wake up in the morning. That's the reason why they always want to sleep in!\n\n[I] But can this tiredness actually hurt you? Unfortunately, it can. [II] If you don't get enough sleep, you find it harder to concentrate at school and you might do worse in your exams. [III] You're also more likely to become ill or suffer from stress. [IV]\n\nLuckily, there's a simple solution. Get more sleep and sleep better with a good evening routine. Firstly, eat dinner early so you don't go to bed on a full stomach. Then, about an hour before you go to bed, start doing something quiet and relaxing like reading a book. Switch off your screens as the bright light from your smartphone or tablet can wake your body up. Finally, go to bed and get up at the same time every day. This helps your body find the right time for bedtime.\n\nIf you follow these tips to get more sleep, you will boost your performance at school while staying happy and healthy. Remember, there are no dreams without sleep. So, if you want to follow your dreams, make sure you catch up on those ZZZs!",
++    "passageTitle": "MAKING THE ZZZS... COME EASY",
++    "options": [
++      "Using your phone or tablet before sleeping helps you relax and fall asleep faster.",
++      "The light from digital devices can keep your body awake, so turn them off before bed.",
++      "Bright screens on phones and tablets make your body fall asleep more quickly.",
++      "You should turn off your phone or tablet to save battery before going to bed."
++    ]
++  },
++  {
++    "id": "u1-doc02-q40",
++    "unit": "unit1",
++    "topic": "Sleep and study",
++    "kind": "exam",
++    "exerciseType": "reading-comprehension",
++    "difficulty": "medium",
++    "prompt": "Which of the following best summarizes the passage?",
++    "content": "Which of the following best summarizes the passage?",
++    "correct": "Understanding sleep patterns and routines helps teenagers sleep better and live healthier lives",
++    "correctAnswer": "Understanding sleep patterns and routines helps teenagers sleep better and live healthier lives",
++    "explanation": "Toàn bài giải thích đặc điểm ngủ của thiếu niên và thói quen giúp cải thiện giấc ngủ, học tập và sức khỏe.",
++    "source": {
++      "filename": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx",
++      "libraryFileId": "libfile_3c4d0f76a16c81918c32aaec938b2959",
++      "section": "Reading: Making the ZZZs come easy",
++      "question": 40,
++      "paragraphs": [
++        150,
++        154
++      ],
++      "answerBasis": "Independently checked from grammar, vocabulary or passage; no supplied answer key used."
++    },
++    "sourceRef": "TỜ SỐ 02 TEST 01 UNIT 1 A LONG AND HEALTHY LIFE.docx · Reading: Making the ZZZs come easy · Q40 · P150–P154",
++    "validated": true,
++    "passageId": "u1-doc02-sleep",
++    "passage": "You're sleeping deeply when, suddenly, the alarm goes off. No! You just need five more minutes... Does this sound familiar? Well, you're not alone. Teenagers everywhere complain about a lack of sleep, but why is this?\n\nTo start with, on average, teenagers need to sleep 8 – 10 hours, compared to adults' 7 – 9. They also usually feel sleepy later at night than adults, and take longer to wake up in the morning. That's the reason why they always want to sleep in!\n\n[I] But can this tiredness actually hurt you? Unfortunately, it can. [II] If you don't get enough sleep, you find it harder to concentrate at school and you might do worse in your exams. [III] You're also more likely to become ill or suffer from stress. [IV]\n\nLuckily, there's a simple solution. Get more sleep and sleep better with a good evening routine. Firstly, eat dinner early so you don't go to bed on a full stomach. Then, about an hour before you go to bed, start doing something quiet and relaxing like reading a book. Switch off your screens as the bright light from your smartphone or tablet can wake your body up. Finally, go to bed and get up at the same time every day. This helps your body find the right time for bedtime.\n\nIf you follow these tips to get more sleep, you will boost your performance at school while staying happy and healthy. Remember, there are no dreams without sleep. So, if you want to follow your dreams, make sure you catch up on those ZZZs!",
++    "passageTitle": "MAKING THE ZZZS... COME EASY",
++    "options": [
++      "Sleep is not important as long as you eat and study well",
++      "Teenagers can sleep less if they learn to relax more during the day",
++      "Understanding sleep patterns and routines helps teenagers sleep better and live healthier lives",
++      "Teenagers need to avoid dreaming if they want to succeed in school"
++    ]
++  }
++]
+diff --git a/tests/phase3.test.mjs b/tests/phase3.test.mjs
+new file mode 100644
+index 0000000..cc66d24
+--- /dev/null
++++ b/tests/phase3.test.mjs
+@@ -0,0 +1,120 @@
++import {test} from 'node:test';
++import assert from 'node:assert/strict';
++import {readFileSync} from 'node:fs';
++import {execFileSync} from 'node:child_process';
++import {getQuestionBank,UNIT1_SOURCE_QUESTIONS} from '../src/question-bank.mjs';
++import {GRAMMAR,normalizeProgress} from '../src/learning-data.mjs';
++import {HISTORY_KEY,PROGRESS_KEY,uniqueValidQuestions,validateQuestion,beginSession,submitSession,loadHistory,selectQuestions,eligibleQuestions,isCorrect,applyQuizResult,contentKey} from '../src/smart-replay.mjs';
++const src=readFileSync('src/App.jsx','utf8');
++function datasets(code){return Function(code.slice(code.indexOf('const UNIT_1_VERIFIED_WORDS'),code.indexOf('const TRANSLATIONS'))+';return VOCABULARY_DATASETS;')();}
++const words=datasets(src),bank=getQuestionBank('unit1',words.unit1);
++const memory=()=>{const map=new Map();return {getItem:key=>map.get(key)??null,setItem:(key,value)=>map.set(key,value)};};
++const config={unit:'unit1',focus:'mixed',exerciseType:'mixed',difficulty:'mixed',count:10,review:false};
++function rng(seed=1234){let value=seed;return ()=>((value=(1664525*value+1013904223)>>>0)/4294967296);}
++for (const focus of ['grammar','mixed']) {
++ test(`${focus}: 3 consecutive ten-question sessions across history reloads have 30 unique IDs and valid shuffled answers`,()=>{
++  const storage=memory(),random=rng(345),seen=new Set();
++  for(let session=0;session<3;session++){
++   const next=beginSession(bank,{...config,focus},storage,1000+session,random);
++   assert.equal(next.paper.length,10);assert.ok(next.saved);
++   assert.equal(new Set(next.paper.map(contentKey)).size,10);
++   for(const q of next.paper){assert.ok(!seen.has(q.id),`repeated ${q.id}`);seen.add(q.id);if(q.options){assert.equal(q.options.filter(o=>o===q.correct).length,1);assert.ok(isCorrect(q,q.correct));}}
++   const answers=Object.fromEntries(next.paper.map(q=>[q.id,q.correct]));
++   const result=submitSession(next.session,next.paper,answers,storage,1100+session);
++   assert.equal(result.score,10);assert.equal(loadHistory(storage).sessions.length,session+1);
++  }
++  assert.equal(seen.size,30);
++ });
++}
++test('Unit 1 has exactly 70 unique source additions, 50 grammar, 124 vocabulary and 16 exam-skill questions',()=>{
++ assert.equal(UNIT1_SOURCE_QUESTIONS.length,70);assert.equal(bank.length,190);
++ assert.equal(uniqueValidQuestions(bank).length,190);
++ assert.deepEqual(Object.fromEntries(['grammar','vocabulary','exam'].map(k=>[k,bank.filter(q=>q.kind===k).length])),{grammar:50,vocabulary:124,exam:16});
++ for(const q of bank){assert.ok(validateQuestion(q),q.id);assert.equal(q.correctAnswer,q.correct);assert.equal(q.content,q.prompt);}
++ for(const q of UNIT1_SOURCE_QUESTIONS){assert.ok(q.source.filename.endsWith('.docx'));assert.ok(q.source.libraryFileId.startsWith('libfile_'));assert.ok(q.source.paragraphs.length===2);}
++});
++test('fresh storage does not inherit another browser history; reload persists selections even before submission',()=>{
++ const a=memory();const first=beginSession(bank,config,a,1000,rng(12));
++ const next=beginSession(bank,config,a,1001,rng(12));
++ assert.ok(next.paper.every(q=>!first.paper.some(p=>p.id===q.id)));
++ assert.equal(Object.keys(loadHistory(memory()).questions).length,0);
++});
++test('unattempted questions first; least recently seen first when exhaustion occurs',()=>{
++ const small=bank.filter(q=>q.kind==='grammar').slice(0,4);
++ const history={version:1,sessions:[],questions:Object.fromEntries(small.map((q,i)=>[q.id,{attempts:1,lastCorrect:true,lastSeen:(i+1)*100,seenCount:1}]))};
++ history.questions[small[3].id].attempts=0;
++ const selected=selectQuestions(small,{...config,count:2},history,()=>0.5);
++ assert.deepEqual(new Set(selected.map(q=>q.id)),new Set([small[3].id,small[0].id]));
++});
++test('Review Mistakes contains unresolved incorrect answers; normal practice does not promote old mistakes above unseen',()=>{
++ const storage=memory();const first=beginSession(bank,config,storage,1000,rng());
++ const answers=Object.fromEntries(first.paper.map((q,i)=>[q.id,i<3?'wrong':q.correct]));
++ submitSession(first.session,first.paper,answers,storage,2000);
++ const review=beginSession(bank,{...config,review:true,count:30},storage,3000,rng());
++ assert.equal(review.paper.length,3);assert.ok(review.paper.every(q=>first.paper.slice(0,3).some(p=>p.id===q.id)));
++ const normal=beginSession(bank,config,storage,4000,rng());assert.ok(normal.paper.every(q=>!first.paper.some(p=>p.id===q.id)));
++ const fixed=Object.fromEntries(review.paper.map(q=>[q.id,q.correct]));submitSession(review.session,review.paper,fixed,storage,5000);
++ assert.equal(eligibleQuestions(bank,{...config,review:true},loadHistory(storage)).length,0);
++});
++test('oversize and empty selections are capped with no fabricated IDs, source items or repeated content',()=>{
++ const small=bank.filter(q=>q.exerciseType==='sentence-transformation');const storage=memory();
++ const next=beginSession(small,{...config,count:30},storage,1000,rng());
++ assert.equal(next.available,5);assert.equal(next.paper.length,5);
++ assert.ok(next.paper.every(q=>small.some(p=>p.id===q.id)));
++ const none=beginSession(bank,{...config,focus:'exam',exerciseType:'verb-forms'},storage);
++ assert.equal(none.paper.length,0);assert.equal(none.session,null);
++});
++test('difficulty and exercise filters only select matching items; selection cannot mutate canonical options',()=>{
++ const before=structuredClone(bank);
++ const result=beginSession(bank,{...config,difficulty:'hard',exerciseType:'sentence-transformation'},memory(),1000,rng());
++ assert.equal(result.paper.length,5);assert.ok(result.paper.every(q=>q.difficulty==='hard'&&q.exerciseType==='sentence-transformation'));
++ assert.deepEqual(bank,before);
++});
++test('text answers normalize case, punctuation, apostrophes and sequence spacing without accepting wrong grammar',()=>{
++ const transform=bank.find(q=>q.id==='u1-doc01-ex2-q07');assert.ok(isCorrect(transform,'i HAVE NOT tried doing morning exercises before!'));
++ assert.ok(!isCorrect(transform,'I never try doing morning exercises before.'));
++ const arrange=bank.find(q=>q.id==='u1-doc01-ex7-q01');assert.ok(isCorrect(arrange,'C - A - B'));assert.ok(!isCorrect(arrange,'a-b-c'));
++});
++test('submission is idempotent; quiz mistakes are stored while XP, streak, progress and extension fields are preserved',()=>{
++ const storage=memory();const progress={xp:345,streak:9,masteredWords:['u1-001'],reviewWords:['u1-002'],mistakesNotebook:[{id:'legacy',wordId:'u2-001'}],custom:{keep:true}};
++ storage.setItem(PROGRESS_KEY,JSON.stringify(progress));
++ const old=storage.getItem(PROGRESS_KEY);const next=beginSession(bank,config,storage,1000,rng());assert.equal(storage.getItem(PROGRESS_KEY),old);
++ const answers=Object.fromEntries(next.paper.map((q,i)=>[q.id,i===0?'wrong':q.correct]));
++ const result=submitSession(next.session,next.paper,answers,storage,2000);assert.equal(result.score,9);
++ assert.ok(submitSession(next.session,next.paper,answers,storage,3000).alreadySubmitted);
++ const after=applyQuizResult(progress,next.paper,answers,2000);
++ assert.equal(after.xp,390);assert.equal(after.streak,9);assert.deepEqual(after.masteredWords,progress.masteredWords);assert.deepEqual(after.reviewWords,progress.reviewWords);assert.deepEqual(after.custom,progress.custom);
++ assert.equal(after.mistakesNotebook.length,2);assert.ok(after.mistakesNotebook.some(m=>m.id==='legacy'));
++ assert.deepEqual(normalizeProgress(after),after);
++});
++test('legacy vocabulary mistakes remain eligible for Review Mistakes',()=>{
++ const storage=memory();storage.setItem(PROGRESS_KEY,JSON.stringify({mistakesNotebook:[{wordId:'u1-001',id:'legacy'}]}));
++ const next=beginSession(bank,{...config,review:true},storage,1000,rng());assert.deepEqual(next.paper.map(q=>q.id),['unit1-v-u1-001']);
++});
++test('all original vocabulary records, grammar lessons and unrelated activity components remain unchanged',async()=>{
++ const oldSrc=execFileSync('git',['show','phase2-working-20261028:src/App.jsx'],{encoding:'utf8'});
++ assert.deepEqual(datasets(oldSrc),words);
++ for(const name of ['NavTab','VocabLabView','FlashcardMode','MultipleChoiceMode','SpellingMode','WordMatchingMode','MiniGamesView']){
++   const pattern=new RegExp(`function ${name}\\([^]*?(?=\\nfunction |$)`);
++   assert.equal(src.match(pattern)?.[0],oldSrc.match(pattern)?.[0],name);
++ }
++ const oldData=execFileSync('git',['show','phase2-working-20261028:src/learning-data.mjs'],{encoding:'utf8'});
++ const oldModule=await import('data:text/javascript;base64,'+Buffer.from(oldData).toString('base64'));
++ assert.deepEqual(GRAMMAR,oldModule.GRAMMAR);
++ assert.ok(src.includes("localStorage.setItem('es11_student_an_progress'"));
++});
++test('duplicate IDs/content and incomplete questions are rejected by selection, not deleted from source records',()=>{
++ const q=bank[0];const inputs=[q,{...q,id:'alias'}, {...q,correct:'not an option'}, {...q,id:'x',explanation:''}];
++ assert.equal(uniqueValidQuestions(inputs).length,1);assert.equal(inputs.length,4);
++ const unit2=getQuestionBank('unit2',words.unit2);assert.equal(unit2.length,125);assert.equal(uniqueValidQuestions(unit2).length,123);
++});
++test('unavailable localStorage returns an explicit unsaved result without disabling practice',()=>{
++ const storage={getItem:()=>null,setItem:()=>{throw new Error('Quota');}};
++ const next=beginSession(bank,config,storage);assert.equal(next.saved,false);assert.equal(next.paper.length,10);
++});
++test('healthy and fit-equivalent meanings do not compete as vocabulary distractors',()=>{
++ const healthy=bank.find(q=>q.id==='unit1-v-u1-002a');
++ const fitMeanings=words.unit1.filter(w=>/fit|healthy|healthful|in (?:good )?shape/.test(w.word)).map(w=>w.vietnamese);
++ assert.ok(healthy.options.filter(o=>o!==healthy.correct).every(o=>!fitMeanings.includes(o)));
++ for(const q of bank.filter(q=>q.kind==='vocabulary'&&q.wordId))assert.equal(q.options.length,4,q.id);
++});

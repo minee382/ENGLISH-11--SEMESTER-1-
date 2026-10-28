@@ -1,0 +1,13 @@
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+const read=p=>readFileSync(p,'utf8');
+let app=read('src/App.jsx').replace(/^import[^\n]*from '\.\/[^\n]+\n/gm,'');
+const boundary=app.indexOf('// ==========================================');
+const imports=app.slice(0,boundary),body=app.slice(boundary);
+const flatten=p=>read(p).replace(/^import[^\n]*\n/gm,'').replace(/export default function /g,'function ').replace(/export (function|const) /g,'$1 ');
+const merged=imports+'\n// Phase 3: same targeted source modules, flattened for single-file Canvas use.\n'+flatten('src/learning-data.mjs')+'\n'+`const imported = ${read('src/unit1-source-bank.json')};\n`+flatten('src/question-bank.mjs')+'\n'+flatten('src/smart-replay.mjs')+'\n'+flatten('src/PracticeSetup.jsx')+'\n'+body;
+writeFileSync('dist/GeminiCanvas_App.jsx',merged);
+execFileSync('git',['archive','--format=zip','--output=dist/english-11-phase2-backup.zip','phase2-working-20261028']);
+execFileSync('git',['diff','phase2-working-20261028','--','src','tests','audit','README.md'],{maxBuffer:10*1024*1024,encoding:'utf8',stdio:['ignore','pipe','inherit']});
+const {build}=await import('esbuild');
+await build({stdin:{contents:merged,loader:'jsx',resolveDir:process.cwd()},bundle:true,write:false,external:['react','lucide-react']});
